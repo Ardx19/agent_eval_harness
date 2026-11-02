@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": {
+    "success": true,
+    "routes": [
+      {
+        "type": "mol",
+        "hide": false,
+        "smiles": "CC(=O)Oc1ccccc1C(=O)O",
+        "is_chemical": true,
+        "in_stock": false,
+        "children": [
+          {
+            "type": "reaction",
+            "hide": false,
+            "is_reaction": true,
+            "metadata": {
+              "policy_probability": 0.72,
+              "policy_name": "uspto"
+            },
+            "children": [
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "CC(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              },
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "Oc1ccccc1C(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "mol",
+        "hide": false,
+        "smiles": "CC(=O)Oc1ccccc1C(=O)O",
+        "is_chemical": true,
+        "in_stock": false,
+        "children": [
+          {
+            "type": "reaction",
+            "hide": false,
+            "is_reaction": true,
+            "metadata": {
+              "policy_probability": 0.72,
+              "policy_name": "uspto"
+            },
+            "children": [
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "CC(=O)Cl",
+                "is_chemical": true,
+                "in_stock": true
+              },
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "Oc1ccccc1C(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "mol",
+        "hide": false,
+        "smiles": "CC(=O)Oc1ccccc1C(=O)O",
+        "is_chemical": true,
+        "in_stock": false,
+        "children": [
+          {
+            "type": "reaction",
+            "hide": false,
+            "is_reaction": true,
+            "metadata": {
+              "policy_probability": 0.72,
+              "policy_name": "uspto"
+            },
+            "children": [
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "CC(=O)OC(C)=O",
+                "is_chemical": true,
+                "in_stock": true
+              },
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "Oc1ccccc1C(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "search_time": 31.0,
+    "message": "success",
+    "metadata": {
+      "routes_requested": 3,
+      "routes_found": 3,
+      "routes_unique": 3,
+      "canonical_smiles": null,
+      "cache_hit": false,
+      "stock_used": "zinc"
+    }
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

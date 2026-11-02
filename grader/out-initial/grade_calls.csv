@@ -1,0 +1,32 @@
+task,trial,call_id,mode,skill,key_params,exit,duration_s,peak_mem_mb,host_fault,ok,error_class,response_keys
+p33,1,tb1,list_skills,none,none,0,93.5,5672,no,True,none,skills
+p33,1,tb2,route_query,none,none,0,45.0,5676,no,True,molecule_not_found,error;message;success
+p37,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,177.6,5668,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p37,1,tb2,run_skill,route_generation,"{""max_routes"": 5}",0,129.5,5671,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p37,1,tb3,run_skill,route_analysis,none,0,31.8,5665,no,True,none,depth;num_intermediates;num_steps
+p38,1,tb1,route_query,none,none,0,31.7,5670,no,True,none,available;message;selected;success
+p39,1,tb1,batch_assess_feasibility,none,"{""max_steps"": 5, ""min_confidence"": 0.3}",0,224.1,5636,no,True,none,failure_breakdown;feasible_smiles;infeasible_smiles;n_cache_hits;n_failed;n_success;results;throughput_mol_per_min;total_time_s
+p45,1,tb1,batch_assess_feasibility,none,"{""max_routes"": 3}",1,4.9,770,no,False,TypeError,none
+p46,1,tb1,batch_generate_routes,none,"{""max_routes"": 3, ""n_workers"": 2, ""pool_size"": 1}",0,242.1,5666,no,True,none,n_cache_hits;n_failed;n_success;results;throughput_mol_per_min;total_time_s
+p48,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,37.4,5664,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p48,1,tb2,run_skill,route_comparison,none,0,30.0,5670,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+p49,1,tb1,run_skill,route_generation,"{""max_routes"": 2}",0,41.0,5670,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p49,1,tb2,run_skill,reaction_score,"{""scorer"": ""state_socre""}",0,30.2,5667,no,True,none,message;per_reaction_scores;scored_routes;success
+p53,1,tb1,run_skill,synthesis_feasibility,"{""max_depth"": 2, ""max_steps"": 5, ""min_confidence"": 0.3}",0,44.0,5649,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+p54,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,43.3,5664,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p54,1,tb2,run_skill,synthesis_feasibility,"{""max_routes"": 5, ""max_steps"": 5, ""min_confidence"": 0.3}",0,44.9,5666,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+p55,1,tb1,run_skill,route_generation,"{""max_routes"": 10}",0,67.6,5645,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p55,1,tb2,run_skill,route_comparison,none,0,30.0,5642,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+p55,1,tb3,run_skill,reaction_score,"{""scorer"": ""route cost""}",0,30.2,5678,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb4,run_skill,reaction_score,"{""scorer"": ""number of pre-cursors""}",0,33.3,5644,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb5,run_skill,reaction_score,"{""scorer"": ""number of pre-cursors""}",0,33.7,5663,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb6,run_skill,reaction_score,"{""scorer"": ""number of pre-cursors in stock""}",0,33.3,5634,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb7,run_skill,reaction_score,"{""scorer"": ""number of reactions""}",0,32.7,5633,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb8,run_skill,reaction_score,"{""scorer"": ""number of pre-cursors""}",0,35.4,5665,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb9,run_skill,reaction_score,"{""scorer"": ""number of pre-cursors in stock""}",0,35.6,5631,no,True,none,message;per_reaction_scores;scored_routes;success
+p55,1,tb10,run_skill,reaction_score,"{""scorer"": ""number of reactions""}",0,36.3,5640,no,True,none,message;per_reaction_scores;scored_routes;success
+p42,1,tb1,batch_generate_routes,none,"{""max_routes"": 5, ""n_workers"": 2, ""pool_size"": 1}",1,19.0,773,no,False,TypeError,none
+p42,1,tb2,batch_generate_routes,none,"{""max_routes"": 1, ""n_workers"": 1, ""pool_size"": 1}",0,89.1,5678,no,True,none,n_cache_hits;n_failed;n_success;results;throughput_mol_per_min;total_time_s
+p42,1,tb3,bogus_mode_xyz,none,none,1,15.4,774,no,False,ValueError,none
+p43,1,tb1,batch_assess_feasibility,none,"{""max_routes"": 3, ""n_workers"": 2, ""pool_size"": 1}",1,330.1,5664,no,False,AttributeError,none
+p43,1,tb2,batch_assess_feasibility,none,"{""max_routes"": 3, ""n_workers"": 2, ""pool_size"": 1}",0,416.5,5649,no,True,none,failure_breakdown;feasible_smiles;infeasible_smiles;n_cache_hits;n_failed;n_success;results;throughput_mol_per_min;total_time_s

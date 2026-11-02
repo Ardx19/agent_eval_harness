@@ -1,0 +1,1 @@
+{"id": "aspirin-feasibility", "prompt": "Is aspirin (SMILES: CC(=O)Oc1ccccc1C(=O)O) synthesizable? Please use the retrosynthesis skill to assess it, and tell me how many steps the best route has and how many of its building blocks are in stock.", "tags": ["retrosynthesis", "phase1-gate"]}

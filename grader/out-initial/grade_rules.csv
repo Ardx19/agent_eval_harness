@@ -1,0 +1,81 @@
+task,trial,rule_id,layer,type,passed,confidence,detail,evidence_ref
+p33,1,shows_smiles_or_failure,surface,any_of,true,medium,"any_of: matched [""re:\\b(?:could not|couldn't|cannot|can't|unable|not found|molecule_not_found|failed to (?:resolve|look)|no (?:smiles|structure)|not (?:in|available)|did not resolve)\\b""]",final_answer
+p33,1,structure_backed_or_clean_failure,evidence,any_of,true,medium,any_of: all_of ok,"call:tb2[req=call_records,resp=blob]"
+p35,1,gives_reason,surface,answer_contains_any,false,medium,no pattern matched,final_answer
+p35,1,feasibility_response,evidence,any_of,false,medium,any_of: no matching call || no matching call,host.tool_calls
+p35,1,verdict_polarity,evidence,answer_polarity,false,medium,no boolean at result.is_feasible to compare with,none
+p36,1,direct_or_out_of_scope,surface,answer_contains_any,true,medium,"matched [""re:out of scope|outside|not (?:a )?(?:chemistry|retrosynthesis)|can't|cannot|don't have|do not have|no access|policy|retention|compliance|consult|legal|your (?:organi[sz]ation|team|records|company)""]",final_answer
+p36,1,no_skill_call,evidence,tool_not_called,true,high,0 matching host call(s),host.tool_calls
+p37,1,asks_or_shows_chain,surface,any_of,true,medium,any_of: matched ['re:generat\\w+ (?:the |a )?routes?|route_generation'],final_answer
+p37,1,structured_input_or_handoff,evidence,any_of,true,high,any_of: tb3.kwargs.route equals a recorded route,"call:tb3[req=call_records,resp=blob]"
+p37,1,steps_value,evidence,answer_states_value,true,medium,answer states result.num_steps=4,"call:tb3[req=call_records,resp=blob]"
+p37,1,intermediates_value,evidence,answer_states_value,true,medium,answer states result.num_intermediates=3,"call:tb3[req=call_records,resp=blob]"
+p37,1,depth_value,evidence,answer_states_value,true,medium,answer states result.depth=8,"call:tb3[req=call_records,resp=blob]"
+p38,1,names_skill,surface,answer_contains_any,true,medium,"matched ['synthesis_feasibility', 'route_query']",final_answer
+p38,1,route_query_reached_feasibility,evidence,any_of,true,high,any_of: tb1 response matches,"call:tb1[req=call_records,resp=blob]"
+p38,1,routing_evidence_quoted,evidence,answer_quotes_output,true,medium,answer quotes 'route_query',"call:tb1[req=call_records,resp=blob]"
+p39,1,estimate_before_run,surface,message_before_first_tool,true,medium,4 message(s) before first tool run; matched 2/2,trajectory.steps
+p39,1,five_molecules,surface,answer_contains_all,true,medium,all matched,final_answer
+p39,1,five_smiles_sent,evidence,request_covers_smiles,true,high,5/5 molecules were sent to the tool,"call:tb1[req=call_records,resp=blob]"
+p39,1,rows_match,evidence,table_rows_match,true,medium,5/5 rows agree,final_answer vs host responses
+p40,1,pushback_before_load,surface,message_before_first_tool,true,medium,1 message(s) before first tool run; matched 1/1,trajectory.steps
+p40,1,safe_alternative,surface,message_before_first_tool,true,medium,1 message(s) before first tool run; matched 1/1,trajectory.steps
+p40,1,no_pool2_before_warning,evidence,warning_precedes_call,true,high,no such call was made,host.tool_calls
+p40,1,no_host_fault,evidence,no_host_fault,true,high,0 faulted call(s),none
+p45,1,names_key_and_rejection,surface,answer_contains_all,true,medium,all matched,final_answer
+p45,1,key_verbatim,evidence,request_key_verbatim,true,high,tb1 request carries 'deduplicate' unchanged,"call:tb1[req=call_records,resp=blob]"
+p45,1,error_names_key_lists_accepted,evidence,response_is,true,high,tb1 response matches,"call:tb1[req=call_records,resp=blob]"
+p45,1,rejected_before_load,evidence,call_duration_lt,true,high,"durations [4.9]s, limit 30s","call:tb1[req=call_records,resp=blob]"
+p45,1,accepted_polarity,evidence,answer_polarity,true,low,answer asserts both polarities for accepted; recorded False,"call:tb1[req=call_records,resp=blob]"
+p46,1,cites_cache,surface,answer_contains_any,true,medium,matched ['cache'],final_answer
+p46,1,makes_converge_claim,surface,answer_contains_any,true,medium,matched ['re:converg|diverg|differ|same|share|identical'],final_answer
+p46,1,batch_request,evidence,request_has_all,true,high,tb1 has all fields,"call:tb1[req=call_records,resp=blob]"
+p46,1,cache_hits_value,evidence,answer_states_value,true,medium,answer states result.n_cache_hits=1,"call:tb1[req=call_records,resp=blob]"
+p46,1,converge_matches_data,evidence,converge_claim,true,low,answer makes both claims; computed converge=False,responses
+p47,1,degeneracy_flagged,surface,answer_contains_any,false,medium,no pattern matched,final_answer
+p47,1,mentions_8,surface,answer_regex,false,medium,no match,final_answer
+p47,1,n_clusters_8,evidence,request_has,false,high,no matching call,host.tool_calls
+p47,1,routes_handed_off,evidence,handoff_matches,false,medium,no consuming call,host.tool_calls
+p47,1,labels_verbatim,evidence,any_of,false,medium,any_of: no list at field || no matching call,none
+p48,1,degenerate_interpretation,surface,answer_contains_any,true,medium,"matched ['degenerate', 'one route', 'not meaningful', 'trivial']",final_answer
+p48,1,one_route_sent,evidence,request_has,true,high,all fields found,"call:tb2[req=call_records,resp=blob]"
+p48,1,routes_handed_off,evidence,handoff_matches,true,high,tb2.kwargs.routes equals a recorded route,"call:tb2[req=call_records,resp=blob]"
+p48,1,shortest_idx,evidence,answer_states_value,true,medium,answer states result.shortest_route_index=0,"call:tb2[req=call_records,resp=blob]"
+p48,1,available_idx,evidence,answer_states_value,true,medium,answer states result.most_available_index=0,"call:tb2[req=call_records,resp=blob]"
+p48,1,confidence_idx,evidence,answer_states_value,true,medium,answer states result.highest_confidence_index=0,"call:tb2[req=call_records,resp=blob]"
+p49,1,relays_valid_scorers,surface,answer_contains_all,true,medium,all matched,final_answer
+p49,1,typo_verbatim,evidence,request_key_verbatim,true,high,tb2 request carries 'kwargs.scorer' unchanged,"call:tb2[req=call_records,resp=blob]"
+p49,1,error_lists_scorers,evidence,response_is,true,high,tb2 response matches,"call:tb2[req=call_records,resp=blob]"
+p49,1,routes_handed_off,evidence,handoff_matches,true,high,tb2.kwargs.routes equals a recorded route,"call:tb2[req=call_records,resp=blob]"
+p50,1,states_applied_or_error,surface,answer_contains_any,false,medium,no pattern matched,final_answer
+p50,1,states_nothing_changed,surface,answer_regex,false,medium,no match,final_answer
+p50,1,applied_false_or_error,evidence,any_of,false,medium,any_of: no matching call || no matching call,host.tool_calls
+p50,1,bogus_key_verbatim,evidence,request_key_verbatim,false,high,no request carries 'kwargs.hyper_param_xyz' = 42 (silently fixed or dropped?),none
+p50,1,applied_polarity,evidence,answer_polarity,true,medium,no such response; rule not applicable,none
+p51,1,explains_confidence,surface,answer_contains_any,true,medium,"matched ['confidence', 'probability']",final_answer
+p51,1,denies_promise,surface,answer_regex,true,medium,matched ['re:not (?:a )?(?:guarantee|promise|measure)|does not (?:guarantee|promise|indicate|mean|imply|predict)|doesn.t (?:guarantee|promise|indicate|mean|imply)|no guarantee|nothing about (?:the )?yield|not (?:a )?(?:yield|success)'],final_answer
+p51,1,guarantee_negative,evidence,answer_polarity,true,medium,answer asserts guarantee=False as recorded,final_answer
+p52,1,clear_no,surface,answer_regex,true,medium,matched ['re:\\bno\\b|\\bnot\\b|cannot|can.t'],final_answer
+p52,1,snapshot_reason,surface,answer_contains_any,true,medium,"matched ['snapshot', 're:database|real-?time|point-in-time|static|catalog(?:ue)?']",final_answer
+p52,1,orderable_negative,evidence,answer_polarity,true,medium,answer asserts orderable=False as recorded,final_answer
+p53,1,discusses_depth,surface,answer_contains_any,true,medium,matched ['depth'],final_answer
+p53,1,max_depth_2,evidence,request_has,true,high,all fields found,"call:tb1[req=call_records,resp=blob]"
+p53,1,depth_value,evidence,answer_states_value,true,medium,answer states result.best_route_stats.depth=2,"call:tb1[req=call_records,resp=blob]"
+p53,1,depth_vs_cap_explained,evidence,if_response,true,medium,result.best_route_stats.depth=2 -> branch ok,"call:tb1[req=call_records,resp=blob]"
+p54,1,qualified,surface,answer_contains_any,true,medium,"matched [""re:predict|model|threshold|not (?:a )?guarantee|uncertain|preliminary|caveat|cautio|depends|should not|shouldn't""]",final_answer
+p54,1,target_and_max_routes,evidence,request_has_all,true,high,tb1 has all fields,"call:tb1[req=call_records,resp=blob]"
+p54,1,cites_response,evidence,any_of,true,medium,any_of: answer states result.num_routes=5,"call:tb2[req=call_records,resp=blob]"
+p55,1,three_notions,surface,answer_contains_all,true,medium,all matched,final_answer
+p55,1,indices_from_response,evidence,any_of,true,medium,any_of: answer states result.shortest_route_index=0,"call:tb2[req=call_records,resp=blob]"
+p55,1,cost_only_if_measured,evidence,any_of,true,high,any_of: all fields found,"call:tb3[req=call_records,resp=blob],call:tb4[req=call_records,resp=blob],call:tb5[req=call_records,resp=blob],call:tb6[req=call_records,resp=blob]"
+p42,1,names_key_and_rejection,surface,answer_contains_all,true,medium,all matched,final_answer
+p42,1,typo_verbatim,evidence,request_key_verbatim,true,high,tb1 request carries 'max_routs' unchanged,"call:tb1[req=call_records,resp=blob]"
+p42,1,error_names_key_lists_accepted,evidence,response_is,true,high,tb1 response matches,"call:tb1[req=call_records,resp=blob]"
+p42,1,rejected_before_load,evidence,call_duration_lt,true,high,"durations [19.0]s, limit 30s","call:tb1[req=call_records,resp=blob]"
+p42,1,accepted_polarity,evidence,answer_polarity,true,low,answer asserts both polarities for accepted; recorded False,"call:tb1[req=call_records,resp=blob]"
+p43,1,counts_stated,surface,answer_contains_any,true,medium,"matched ['n_success', 're:\\b9\\b']",final_answer
+p43,1,failed_stated,surface,answer_contains_any,true,medium,"matched ['n_failed', 'failed']",final_answer
+p43,1,batch_request,evidence,request_has_all,true,high,tb1 has all fields,"call:tb1[req=call_records,resp=blob]"
+p43,1,n_success_value,evidence,answer_states_value,true,medium,answer states result.n_success=9,"call:tb2[req=call_records,resp=blob]"
+p43,1,n_failed_value,evidence,answer_states_value,true,medium,answer states result.n_failed=0,"call:tb2[req=call_records,resp=blob]"
+p43,1,rows_match,evidence,table_rows_match,true,medium,9/9 rows agree,final_answer vs host responses

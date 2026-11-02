@@ -1,0 +1,6 @@
+task,trial,call_id,mode,skill,key_params,exit,duration_s,peak_mem_mb,host_fault,ok,error_class,response_keys
+p33,1,tb1,list_skills,none,none,0,71.9,5471,no,True,none,skills
+p33,1,tb2,route_query,none,none,0,55.5,5638,no,True,molecule_not_found,error;message;success
+p33,1,tb3,run_skill,route_generation,"{""max_routes"": 1}",0,136.6,5500,no,True,none,message;metadata;routes;search_time;stereo_check;success
+p33,1,tb4,run_skill,synthesis_feasibility,"{""max_routes"": 5}",0,155.9,5488,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+p33,1,tb5,run_skill,route_generation,"{""max_routes"": 5}",0,148.8,5505,no,True,none,message;metadata;routes;search_time;stereo_check;success

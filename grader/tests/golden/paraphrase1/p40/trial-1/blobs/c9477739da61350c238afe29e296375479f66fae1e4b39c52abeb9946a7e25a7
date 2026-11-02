@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "batch_assess_feasibility",
+  "result": {
+    "results": [
+      [
+        "CCO",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "c1ccccc1",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CC(=O)O",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CN",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ]
+    ],
+    "n_success": 4,
+    "n_failed": 0,
+    "total_time_s": 90.0,
+    "throughput_mol_per_min": 2.0,
+    "n_cache_hits": 0,
+    "feasible_smiles": [
+      "CCO",
+      "c1ccccc1",
+      "CC(=O)O",
+      "CN"
+    ],
+    "infeasible_smiles": [],
+    "failure_breakdown": {}
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

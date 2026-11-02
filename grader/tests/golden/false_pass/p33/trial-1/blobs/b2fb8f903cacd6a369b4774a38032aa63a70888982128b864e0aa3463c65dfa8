@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "route_query",
+  "result": {
+    "success": false,
+    "error": "intent_not_recognized",
+    "message": "no intent"
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

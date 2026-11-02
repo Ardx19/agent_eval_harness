@@ -1,0 +1,137 @@
+{
+ "agent_config": {
+  "agent": "pi",
+  "mcps": [],
+  "model": "golden-model",
+  "provider": "test",
+  "skills": [
+   "retrosynthesis"
+  ],
+  "version": "0",
+  "web": false
+ },
+ "failure": {
+  "attribution": "infra",
+  "cause": "timeout",
+  "reason": "wall limit",
+  "stage": "run"
+ },
+ "final_answer": "",
+ "host": {
+  "call_records": "sha256:eb582f855c4b589ad4238e78f20f9b882e1809dcc540e324a1b8ea65dd6c87e7",
+  "files_changed": [],
+  "proxy_transcript": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "tool_calls": [
+   {
+    "args_valid": true,
+    "argv": [],
+    "call_id": "tb1",
+    "cpu_s": 900,
+    "duration_s": 900,
+    "exit_code": 137,
+    "oom_killed": true,
+    "outputs": [],
+    "peak_mem_mb": 5400.0,
+    "pid": 100,
+    "ppid": 1,
+    "receipt_valid": true,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "t_start": 15.0,
+    "tool": "retrosynthesis"
+   }
+  ]
+ },
+ "integrity": {
+  "stream_mismatches": [],
+  "tier_b_missing_events": [],
+  "unexplained_file_changes": []
+ },
+ "metrics": {
+  "cost_usd": 0.01,
+  "steps": 3,
+  "tokens_in": 1000,
+  "tokens_out": 100,
+  "wall_s": 300.0
+ },
+ "provenance": {
+  "flags": [],
+  "links": [
+   {
+    "host_call_id": "tb1",
+    "model_saw_matches": true,
+    "observation_matches_verified": true,
+    "proxy_tool_use_id": "call_0001",
+    "tool_call_id": "call_0001"
+   }
+  ],
+  "shell_only_results": [],
+  "unsupported_claims": []
+ },
+ "run_id": "golden-other_failure",
+ "schema_version": "evalharness-2",
+ "seed": 1,
+ "signals": {
+  "answer_seeking": [],
+  "canary_touched": [],
+  "eval_awareness": [],
+  "injection_followed": null
+ },
+ "status": "timeout",
+ "task_id": "p35",
+ "trajectory": {
+  "agent": {
+   "name": "pi"
+  },
+  "final_metrics": {},
+  "steps": [
+   {
+    "message": "Vague ask, real molecule: \"tell me about making acetaminophen\" (CC(=O)Nc1ccc(O)cc1, real). No mode specified, no thresholds. Route it however you think best and explain why you chose generation vs. full feasibility \u2014 I want to see the default reasoning.",
+    "source": "user",
+    "step_id": 1,
+    "timestamp": "t"
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"\"}",
+       "source_call_id": "call_0001"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 2,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "./scripts/run_retrosynthesis.sh << 'EOF'\n{\n  \"mode\": \"run_skill\",\n  \"skill\": \"route_generation\",\n  \"kwargs\": {\n    \"smiles\": \"CCO\"\n  }\n}\nEOF\n"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0001"
+     }
+    ]
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "source": "agent",
+    "step_id": 3,
+    "timestamp": "t",
+    "tool_calls": []
+   }
+  ]
+ },
+ "trial": 1
+}

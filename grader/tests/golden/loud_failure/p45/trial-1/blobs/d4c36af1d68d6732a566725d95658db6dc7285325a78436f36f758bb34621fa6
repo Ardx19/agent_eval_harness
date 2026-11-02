@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": null,
+  "error": "ValueError: missing required field 'smiles' for skill=route_generation"
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

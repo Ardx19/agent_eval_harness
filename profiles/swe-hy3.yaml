@@ -1,0 +1,13 @@
+# SWE-bench-Lite-style tasks with Hy3 through opencode.
+agent: opencode
+provider: opencode-go
+model: hy3
+api: openai
+skills: []
+realism: off
+vm_mem_mib: 2048
+concurrency: 2
+budget_usd: 8
+limits:
+  wall_s: 1500
+  tokens: 3000000

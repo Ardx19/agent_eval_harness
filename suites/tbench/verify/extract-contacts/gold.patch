@@ -1,0 +1,17 @@
+diff -ruN --no-dereference a/contacts.json b/contacts.json
+--- a/contacts.json	1970-01-01 05:30:00.000000000 +0530
++++ b/contacts.json	2026-10-05 09:00:02.663389951 +0530
+@@ -0,0 +1,12 @@
++{
++  "emails": [
++    "dana.lee@example.com",
++    "ops-team@example.org",
++    "sales@vendor.example.net"
++  ],
++  "phones": [
++    "2125550107",
++    "4155550132",
++    "4155550199"
++  ]
++}
+\ No newline at end of file

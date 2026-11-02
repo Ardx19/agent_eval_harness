@@ -1,0 +1,8 @@
+{
+ "instance_id": "extract-contacts",
+ "kind": "script",
+ "fail_to_pass": [
+  "contacts-correct"
+ ],
+ "pass_to_pass": []
+}

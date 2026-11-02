@@ -1,0 +1,10 @@
+{
+ "instance_id": "csv-clean",
+ "kind": "script",
+ "fail_to_pass": [
+  "clean-script-exists",
+  "output-correct",
+  "script-reproduces-output"
+ ],
+ "pass_to_pass": []
+}

@@ -1,0 +1,20 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 443,
+    "tls": {
+      "enabled": true,
+      "cert": "default.pem"
+    }
+  },
+  "log": {
+    "level": "debug",
+    "files": [
+      "prod.log",
+      "audit.log"
+    ]
+  },
+  "features": [
+    "z"
+  ]
+}

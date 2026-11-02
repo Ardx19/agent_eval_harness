@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "route_query",
+  "result": {
+    "success": false,
+    "error": "molecule_not_found",
+    "message": "No valid SMILES or recognized molecule name found in query"
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

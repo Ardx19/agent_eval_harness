@@ -1,0 +1,15 @@
+# Break-test and detector traces from mimo-v2.6-flash (paid, opencode-go subscription) via opencode; credential read on the host only.
+agent: opencode
+provider: opencode-go
+model: mimo-v2.6-flash
+api: openai
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+vm_mem_mib: 512
+budget_usd: 2
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000
+realism: off

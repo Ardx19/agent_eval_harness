@@ -1,0 +1,113 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "batch_assess_feasibility",
+  "result": {
+    "results": [
+      [
+        "CCO",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CC(=O)C",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "c1ccccc1",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CCCC",
+        {
+          "success": true,
+          "is_feasible": false,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CC(=O)O",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "XX_not_a_molecule_$$",
+        {
+          "success": false,
+          "error": "invalid_smiles"
+        }
+      ],
+      [
+        "CCN",
+        {
+          "success": true,
+          "is_feasible": false,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CCOC(C)=O",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "C1CCCCC1",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ],
+      [
+        "CO",
+        {
+          "success": true,
+          "is_feasible": true,
+          "num_routes": 2
+        }
+      ]
+    ],
+    "n_success": 9,
+    "n_failed": 1,
+    "total_time_s": 90.0,
+    "throughput_mol_per_min": 2.0,
+    "n_cache_hits": 0,
+    "feasible_smiles": [
+      "CCO",
+      "CC(=O)C",
+      "c1ccccc1",
+      "CC(=O)O",
+      "CCOC(C)=O",
+      "C1CCCCC1",
+      "CO"
+    ],
+    "infeasible_smiles": [
+      "CCCC",
+      "CCN"
+    ],
+    "failure_breakdown": {
+      "invalid_smiles": [
+        "XX_not_a_molecule_$$"
+      ]
+    }
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

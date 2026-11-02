@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "gold_runs": 3,
+  "gold_resolved": 3,
+  "empty_resolved": false,
+  "p2p_excluded": [
+    "tests/test_cli.py::test_disable_dotenv_from_env",
+    "tests/test_cli.py::test_dotenv_path",
+    "tests/test_cli.py::test_load_dotenv"
+  ],
+  "gold_wall_s": 9.23941014
+}

@@ -1,0 +1,15 @@
+{
+ "instance_id": "implement-slugify",
+ "kind": "script",
+ "fail_to_pass": [
+  "slug-0",
+  "slug-1",
+  "slug-2",
+  "slug-3",
+  "slug-4",
+  "slug-5",
+  "slug-6",
+  "slug-7"
+ ],
+ "pass_to_pass": []
+}

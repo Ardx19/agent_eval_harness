@@ -1,0 +1,151 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": {
+    "is_feasible": false,
+    "reason": "avg_confidence=0.12 < min_confidence=0.5",
+    "num_routes": 3,
+    "best_route_index": 0,
+    "best_route_stats": {
+      "index": 0,
+      "num_steps": 1,
+      "num_intermediates": 0,
+      "depth": 2,
+      "availability_ratio": 1.0,
+      "avg_confidence": 0.12
+    },
+    "best_route": {
+      "type": "mol",
+      "hide": false,
+      "smiles": "CCO",
+      "is_chemical": true,
+      "in_stock": false,
+      "children": [
+        {
+          "type": "reaction",
+          "hide": false,
+          "is_reaction": true,
+          "metadata": {
+            "policy_probability": 0.72,
+            "policy_name": "uspto"
+          },
+          "children": [
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(=O)O",
+              "is_chemical": true,
+              "in_stock": true
+            },
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "C",
+              "is_chemical": true,
+              "in_stock": true
+            }
+          ]
+        }
+      ]
+    },
+    "routes": [
+      {
+        "type": "mol",
+        "hide": false,
+        "smiles": "CCO",
+        "is_chemical": true,
+        "in_stock": false,
+        "children": [
+          {
+            "type": "reaction",
+            "hide": false,
+            "is_reaction": true,
+            "metadata": {
+              "policy_probability": 0.72,
+              "policy_name": "uspto"
+            },
+            "children": [
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "CC(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              },
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "C",
+                "is_chemical": true,
+                "in_stock": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "mol",
+        "hide": false,
+        "smiles": "CCO",
+        "is_chemical": true,
+        "in_stock": false,
+        "children": [
+          {
+            "type": "reaction",
+            "hide": false,
+            "is_reaction": true,
+            "metadata": {
+              "policy_probability": 0.72,
+              "policy_name": "uspto"
+            },
+            "children": [
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "CC(=O)O",
+                "is_chemical": true,
+                "in_stock": true
+              },
+              {
+                "type": "mol",
+                "hide": false,
+                "smiles": "C",
+                "is_chemical": true,
+                "in_stock": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "threshold_results": {
+      "results": [
+        {
+          "threshold_name": "num_steps",
+          "threshold_value": 5,
+          "actual_value": 1,
+          "passed": true,
+          "message": "num_steps=1 <= max_steps=5"
+        },
+        {
+          "threshold_name": "availability_ratio",
+          "threshold_value": 0.5,
+          "actual_value": 1.0,
+          "passed": true,
+          "message": "availability"
+        },
+        {
+          "threshold_name": "avg_confidence",
+          "threshold_value": 0.3,
+          "actual_value": 0.12,
+          "passed": false,
+          "message": "confidence"
+        }
+      ]
+    },
+    "message": "OK"
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

@@ -1,0 +1,8 @@
+{
+ "instance_id": "top-ips",
+ "kind": "script",
+ "fail_to_pass": [
+  "top-ips-correct"
+ ],
+ "pass_to_pass": []
+}

@@ -1,0 +1,10 @@
+CCO
+CC(=O)C
+c1ccccc1
+CCCC
+CC(=O)O
+XX_not_a_molecule_$$
+CCN
+CCOC(C)=O
+C1CCCCC1
+CO

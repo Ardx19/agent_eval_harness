@@ -1,0 +1,12 @@
+{
+ "instance_id": "perms-and-links",
+ "kind": "script",
+ "fail_to_pass": [
+  "run-script-content",
+  "run-script-mode",
+  "secret-content",
+  "secret-mode",
+  "latest-link"
+ ],
+ "pass_to_pass": []
+}

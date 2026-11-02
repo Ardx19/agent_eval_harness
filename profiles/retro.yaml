@@ -1,0 +1,13 @@
+# Phase 1 gate: real retrosynthesis skill, pi, live Gemini.
+agent: pi
+provider: google
+model: gemini-3.5-flash-lite
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+vm_mem_mib: 768
+budget_usd: 1
+concurrency: 1
+limits:
+  wall_s: 600
+  tokens: 200000

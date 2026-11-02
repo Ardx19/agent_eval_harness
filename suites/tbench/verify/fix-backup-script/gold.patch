@@ -1,0 +1,14 @@
+diff -ruN --no-dereference a/backup.sh b/backup.sh
+--- a/backup.sh	2026-10-05 09:00:02.643268533 +0530
++++ b/backup.sh	2026-10-05 09:00:02.643268533 +0530
+@@ -1,4 +1,9 @@
+ #!/bin/bash
+ # usage: backup.sh <file> <backup-dir>
+-cp $1 $2/
++if [ ! -f "$1" ]; then
++  echo "backup.sh: no such file: $1" >&2
++  exit 1
++fi
++mkdir -p "$2"
++cp "$1" "$2/"
+ echo "backed up $1"

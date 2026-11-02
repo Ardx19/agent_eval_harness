@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": {
+    "labels": [
+      0,
+      1,
+      2
+    ],
+    "distance_matrix": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        0
+      ]
+    ],
+    "success": true,
+    "message": "ok"
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

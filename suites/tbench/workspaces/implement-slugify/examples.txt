@@ -1,0 +1,3 @@
+Hello, World! => hello-world
+  Multiple   spaces  => multiple-spaces
+Café au lait => cafe-au-lait

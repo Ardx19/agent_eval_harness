@@ -1,0 +1,10 @@
+{
+ "instance_id": "fix-backup-script",
+ "kind": "script",
+ "fail_to_pass": [
+  "copies-file-with-spaces",
+  "creates-backup-dir",
+  "missing-source-fails"
+ ],
+ "pass_to_pass": []
+}

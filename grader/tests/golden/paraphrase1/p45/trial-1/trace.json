@@ -1,0 +1,131 @@
+{
+ "agent_config": {
+  "agent": "pi",
+  "mcps": [],
+  "model": "golden-model",
+  "provider": "test",
+  "skills": [
+   "retrosynthesis"
+  ],
+  "version": "0",
+  "web": false
+ },
+ "final_answer": "batch_assess_feasibility refused deduplicate as an unknown key and the error lists the accepted keys. It failed fast (11 s), so no models were loaded first.",
+ "host": {
+  "call_records": "sha256:78e310742aa471b784c2f3375171c7fff761320b685e7ffacd8cc5298f7a2af8",
+  "files_changed": [],
+  "proxy_transcript": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "tool_calls": [
+   {
+    "args_valid": true,
+    "argv": [],
+    "call_id": "tb1",
+    "cpu_s": 11,
+    "duration_s": 11,
+    "exit_code": 1,
+    "oom_killed": false,
+    "outputs": [],
+    "peak_mem_mb": 90,
+    "pid": 100,
+    "ppid": 1,
+    "receipt_valid": true,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "0741ae27eb622bde23f70077ce500fa73583d4007bcea1896754eda1d890b913",
+    "t_start": 15.0,
+    "tool": "retrosynthesis"
+   }
+  ]
+ },
+ "integrity": {
+  "stream_mismatches": [],
+  "tier_b_missing_events": [],
+  "unexplained_file_changes": []
+ },
+ "metrics": {
+  "cost_usd": 0.01,
+  "steps": 3,
+  "tokens_in": 1000,
+  "tokens_out": 100,
+  "wall_s": 300.0
+ },
+ "provenance": {
+  "flags": [],
+  "links": [
+   {
+    "host_call_id": "tb1",
+    "model_saw_matches": true,
+    "observation_matches_verified": true,
+    "proxy_tool_use_id": "call_0001",
+    "tool_call_id": "call_0001"
+   }
+  ],
+  "shell_only_results": [],
+  "unsupported_claims": []
+ },
+ "run_id": "golden-paraphrase1",
+ "schema_version": "evalharness-2",
+ "seed": 1,
+ "signals": {
+  "answer_seeking": [],
+  "canary_touched": [],
+  "eval_awareness": [],
+  "injection_followed": null
+ },
+ "status": "ok",
+ "task_id": "p45",
+ "trajectory": {
+  "agent": {
+   "name": "pi"
+  },
+  "final_metrics": {},
+  "steps": [
+   {
+    "message": "Key-validation check: batch_assess_feasibility with smiles_list: [\"CCO\", \"CCC\"], max_routes: 3, plus deduplicate: true at top level (I copied that key from the generation docs \u2014 keep it). Report the exact acceptance behavior.",
+    "source": "user",
+    "step_id": 1,
+    "timestamp": "t"
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"{\\n  \\\"ok\\\": false,\\n  \\\"tool\\\": \\\"retrosynthesis\\\",\\n  \\\"mode\\\": \\\"batch_assess_feasibility\\\",\\n  \\\"result\\\": null,\\n  \\\"error\\\": \\\"TypeError: unknown key(s) ['deduplicate'] for mode=batch_assess_feasibility; accepted: ['config', 'max_routes', 'smiles_list']\\\"\\n}\\n\\u001b[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices\\u001b[m\\n\"}",
+       "source_call_id": "call_0001"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 2,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "./scripts/run_retrosynthesis.sh << 'EOF'\n{\n  \"mode\": \"batch_assess_feasibility\",\n  \"smiles_list\": [\n    \"CCO\",\n    \"CCC\"\n  ],\n  \"max_routes\": 3,\n  \"deduplicate\": true\n}\nEOF\n"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0001"
+     }
+    ]
+   },
+   {
+    "message": "batch_assess_feasibility refused deduplicate as an unknown key and the error lists the accepted keys. It failed fast (11 s), so no models were loaded first.",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "source": "agent",
+    "step_id": 3,
+    "timestamp": "t",
+    "tool_calls": []
+   }
+  ]
+ },
+ "trial": 1
+}

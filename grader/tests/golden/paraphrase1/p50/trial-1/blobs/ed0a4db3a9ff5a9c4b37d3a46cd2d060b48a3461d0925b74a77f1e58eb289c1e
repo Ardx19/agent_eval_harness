@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": {
+    "config": {
+      "iteration_limit": 100
+    },
+    "success": true,
+    "message": "overrides validated, not applied",
+    "applied": false
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

@@ -1,0 +1,29 @@
+diff -ruN --no-dereference a/clean.py b/clean.py
+--- a/clean.py	1970-01-01 05:30:00.000000000 +0530
++++ b/clean.py	2026-10-05 09:00:02.663389951 +0530
+@@ -0,0 +1,16 @@
++import csv
++seen, rows = set(), []
++for r in csv.DictReader(open("people.csv")):
++    r = {k: v.strip() for k, v in r.items()}
++    if not r["age"]:
++        continue
++    key = tuple(r.values())
++    if key in seen:
++        continue
++    seen.add(key)
++    rows.append(r)
++rows.sort(key=lambda r: r["name"])
++with open("people_clean.csv", "w", newline="") as f:
++    w = csv.DictWriter(f, fieldnames=["name", "age", "city"], lineterminator="\n")
++    w.writeheader()
++    w.writerows(rows)
+diff -ruN --no-dereference a/people_clean.csv b/people_clean.csv
+--- a/people_clean.csv	1970-01-01 05:30:00.000000000 +0530
++++ b/people_clean.csv	2026-10-05 09:00:02.663389951 +0530
+@@ -0,0 +1,5 @@
++name,age,city
++Ann,29,Rome
++Cy,40,Lima
++Dee,35,Cairo
++Zed,31,Oslo

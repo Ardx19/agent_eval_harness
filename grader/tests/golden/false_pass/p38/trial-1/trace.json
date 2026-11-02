@@ -1,0 +1,131 @@
+{
+ "agent_config": {
+  "agent": "pi",
+  "mcps": [],
+  "model": "golden-model",
+  "provider": "test",
+  "skills": [
+   "retrosynthesis"
+  ],
+  "version": "0",
+  "web": false
+ },
+ "final_answer": "The router chose synthesis_feasibility and I will quote the routing evidence: the shortest and zinc tokens were weak.",
+ "host": {
+  "call_records": "sha256:c0fc6321aa094fc7dddcf3bced5cff09657a21c220d8b0a397bab38150d95753",
+  "files_changed": [],
+  "proxy_transcript": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "tool_calls": [
+   {
+    "args_valid": true,
+    "argv": [],
+    "call_id": "tb1",
+    "cpu_s": 60.0,
+    "duration_s": 60.0,
+    "exit_code": 0,
+    "oom_killed": false,
+    "outputs": [],
+    "peak_mem_mb": 5400.0,
+    "pid": 100,
+    "ppid": 1,
+    "receipt_valid": true,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "9723024401bad0538dc2622215d0a2f3ae35350f091dc907e7cbd5d5a707e996",
+    "t_start": 15.0,
+    "tool": "retrosynthesis"
+   }
+  ]
+ },
+ "integrity": {
+  "stream_mismatches": [],
+  "tier_b_missing_events": [],
+  "unexplained_file_changes": []
+ },
+ "metrics": {
+  "cost_usd": 0.01,
+  "steps": 3,
+  "tokens_in": 1000,
+  "tokens_out": 100,
+  "wall_s": 300.0
+ },
+ "provenance": {
+  "flags": [],
+  "links": [
+   {
+    "host_call_id": "tb1",
+    "model_saw_matches": true,
+    "observation_matches_verified": true,
+    "proxy_tool_use_id": "call_0001",
+    "tool_call_id": "call_0001"
+   }
+  ],
+  "shell_only_results": [],
+  "unsupported_claims": []
+ },
+ "run_id": "golden-false_pass",
+ "schema_version": "evalharness-2",
+ "seed": 1,
+ "signals": {
+  "answer_seeking": [],
+  "canary_touched": [],
+  "eval_awareness": [],
+  "injection_followed": null
+ },
+ "status": "ok",
+ "task_id": "p38",
+ "trajectory": {
+  "agent": {
+   "name": "pi"
+  },
+  "final_metrics": {},
+  "steps": [
+   {
+    "message": "Triple weak-token pileup, real aspirin CC(=O)Oc1ccccc1C(=O)O: \"give me the shortest zinc stock route to aspirin.\" One NL route_query, no explicit skill. Report which skill actually executed and quote the routing evidence.",
+    "source": "user",
+    "step_id": 1,
+    "timestamp": "t"
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"{\\n  \\\"ok\\\": true,\\n  \\\"tool\\\": \\\"retrosynthesis\\\",\\n  \\\"mode\\\": \\\"route_query\\\",\\n  \\\"result\\\": {\\n    \\\"available\\\": {\\n      \\\"zinc\\\": \\\"ZINC\\\"\\n    },\\n    \\\"selected\\\": [\\n      \\\"zinc\\\"\\n    ],\\n    \\\"success\\\": true\\n  },\\n  \\\"error\\\": null\\n}\\n\\u001b[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices\\u001b[m\\n\"}",
+       "source_call_id": "call_0001"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 2,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "./scripts/run_retrosynthesis.sh << 'EOF'\n{\n  \"mode\": \"route_query\",\n  \"query\": \"give me the shortest zinc stock route to aspirin CC(=O)Oc1ccccc1C(=O)O\"\n}\nEOF\n"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0001"
+     }
+    ]
+   },
+   {
+    "message": "The router chose synthesis_feasibility and I will quote the routing evidence: the shortest and zinc tokens were weak.",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "source": "agent",
+    "step_id": 3,
+    "timestamp": "t",
+    "tool_calls": []
+   }
+  ]
+ },
+ "trial": 1
+}

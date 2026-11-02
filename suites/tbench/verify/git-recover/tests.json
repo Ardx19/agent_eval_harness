@@ -1,0 +1,9 @@
+{
+ "instance_id": "git-recover",
+ "kind": "script",
+ "fail_to_pass": [
+  "config-restored",
+  "threshold-fixed"
+ ],
+ "pass_to_pass": []
+}

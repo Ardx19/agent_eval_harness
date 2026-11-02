@@ -1,0 +1,12 @@
+diff -ruN --no-dereference a/data/secret.txt b/data/secret.txt
+--- a/data/secret.txt	1970-01-01 05:30:00.000000000 +0530
++++ b/data/secret.txt	2026-10-05 09:00:02.824361319 +0530
+@@ -0,0 +1 @@
++x
+\ No newline at end of file
+diff -ruN --no-dereference a/scripts/run.sh b/scripts/run.sh
+--- a/scripts/run.sh	1970-01-01 05:30:00.000000000 +0530
++++ b/scripts/run.sh	2026-10-05 09:00:02.824361319 +0530
+@@ -0,0 +1,2 @@
++#!/bin/sh
++echo ok

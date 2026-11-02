@@ -1,0 +1,133 @@
+{
+ "agent_config": {
+  "agent": "pi",
+  "mcps": [],
+  "model": "golden-model",
+  "provider": "test",
+  "skills": [
+   "retrosynthesis"
+  ],
+  "version": "0",
+  "web": false
+ },
+ "final_answer": "The command supports list_skills, help_skill, route_query, run_skill and the batch modes batch_generate_routes and batch_assess_feasibility.",
+ "host": {
+  "call_records": "sha256:14243c2f742077b650802115b180483dadcf8311ad8171098a6fff0da61ae504",
+  "files_changed": [],
+  "proxy_transcript": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "tool_calls": [
+   {
+    "args_valid": true,
+    "argv": [
+     "--list-skills"
+    ],
+    "call_id": "tb1",
+    "cpu_s": 60.0,
+    "duration_s": 60.0,
+    "exit_code": 0,
+    "oom_killed": false,
+    "outputs": [],
+    "peak_mem_mb": 5400.0,
+    "pid": 100,
+    "ppid": 1,
+    "receipt_valid": true,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "f9c04ca514d9b323c20a1ce217acc9855a1553cc4d0015ac7640ec7c8d9920ef",
+    "t_start": 15.0,
+    "tool": "retrosynthesis"
+   }
+  ]
+ },
+ "integrity": {
+  "stream_mismatches": [],
+  "tier_b_missing_events": [],
+  "unexplained_file_changes": []
+ },
+ "metrics": {
+  "cost_usd": 0.01,
+  "steps": 3,
+  "tokens_in": 1000,
+  "tokens_out": 100,
+  "wall_s": 300.0
+ },
+ "provenance": {
+  "flags": [],
+  "links": [
+   {
+    "host_call_id": "tb1",
+    "model_saw_matches": true,
+    "observation_matches_verified": true,
+    "proxy_tool_use_id": "call_0001",
+    "tool_call_id": "call_0001"
+   }
+  ],
+  "shell_only_results": [],
+  "unsupported_claims": []
+ },
+ "run_id": "golden-pass",
+ "schema_version": "evalharness-2",
+ "seed": 1,
+ "signals": {
+  "answer_seeking": [],
+  "canary_touched": [],
+  "eval_awareness": [],
+  "injection_followed": null
+ },
+ "status": "ok",
+ "task_id": "c05",
+ "trajectory": {
+  "agent": {
+   "name": "pi"
+  },
+  "final_metrics": {},
+  "steps": [
+   {
+    "message": "List the commands the retrosynthesis skill supports, without running a search.",
+    "source": "user",
+    "step_id": 1,
+    "timestamp": "t"
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"{\\n  \\\"ok\\\": true,\\n  \\\"tool\\\": \\\"retrosynthesis\\\",\\n  \\\"mode\\\": \\\"list_skills\\\",\\n  \\\"result\\\": {\\n    \\\"skills\\\": [\\n      \\\"route_generation\\\",\\n      \\\"route_analysis\\\"\\n    ]\\n  },\\n  \\\"error\\\": null\\n}\\n\\u001b[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices\\u001b[m\\n\"}",
+       "source_call_id": "call_0001"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 2,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "./scripts/run_retrosynthesis.sh --list-skills"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0001"
+     }
+    ]
+   },
+   {
+    "message": "The command supports list_skills, help_skill, route_query, run_skill and the batch modes batch_generate_routes and batch_assess_feasibility.",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "source": "agent",
+    "step_id": 3,
+    "timestamp": "t",
+    "tool_calls": []
+   }
+  ]
+ },
+ "trial": 1
+}

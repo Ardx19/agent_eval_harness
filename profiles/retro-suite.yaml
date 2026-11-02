@@ -1,0 +1,15 @@
+# The initial 14-prompt retrosynthesis suite: real skill, pi, live Gemini.
+# Limits are looser than the Phase 1 gate because several prompts chain tool calls
+# (each real call is ~1 minute and re-sends a 19 KB skill doc on every model request).
+agent: pi
+provider: google
+model: gemini-3.5-flash-lite
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+vm_mem_mib: 768
+budget_usd: 3
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000

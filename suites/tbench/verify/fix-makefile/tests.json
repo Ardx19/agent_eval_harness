@@ -1,0 +1,10 @@
+{
+ "instance_id": "fix-makefile",
+ "kind": "script",
+ "fail_to_pass": [
+  "make-all-works",
+  "make-clean-works",
+  "sources-untouched"
+ ],
+ "pass_to_pass": []
+}

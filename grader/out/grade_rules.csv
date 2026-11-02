@@ -1,0 +1,3 @@
+task,trial,rule_id,layer,type,passed,confidence,detail,evidence_ref
+p33,1,shows_smiles_or_failure,surface,any_of,true,medium,any_of: 1 SMILES shown,final_answer
+p33,1,structure_backed_or_clean_failure,evidence,any_of,false,medium,"any_of: 1 SMILES shown, 1 unsupported: ['CCN(CCCC(CO)Nc1ccc2cc(C(=O)O)ccc2c1)Cc1ccc(CCF)cc1'] || all_of: no pattern matched",final_answer vs outputs

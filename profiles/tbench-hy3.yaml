@@ -1,0 +1,13 @@
+# Terminal-style tasks with Hy3 through opencode.
+agent: opencode
+provider: opencode-go
+model: hy3
+api: openai
+skills: []
+realism: off
+vm_mem_mib: 1024
+concurrency: 1
+budget_usd: 2
+limits:
+  wall_s: 900
+  tokens: 1500000

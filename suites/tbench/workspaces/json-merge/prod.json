@@ -1,0 +1,14 @@
+{
+  "server": {
+    "port": 443,
+    "tls": {
+      "enabled": true
+    }
+  },
+  "log": {
+    "files": [
+      "prod.log",
+      "audit.log"
+    ]
+  }
+}

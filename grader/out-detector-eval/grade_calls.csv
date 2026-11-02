@@ -1,0 +1,143 @@
+task,trial,call_id,mode,skill,key_params,exit,duration_s,peak_mem_mb,host_fault,ok,error_class,response_keys
+t01,1,tb1,run_skill,route_generation,"{""max_routes"": 1}",0,162.3,5473,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t03,1,tb1,route_query,none,none,0,73.7,5266,no,True,needs_structured_input,error;hint;required_fields;success
+t03,1,tb2,run_skill,synthesis_feasibility,none,0,99.6,5455,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t03,1,tb3,run_skill,reaction_score,"{""scorer"": ""state score""}",0,62.4,5415,no,True,none,message;per_reaction_scores;scored_routes;success
+t04,1,tb1,run_skill,synthesis_feasibility,"{""best_route_metric"": ""most_available""}",0,175.5,5471,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t04,1,tb2,run_skill,route_generation,"{""max_routes"": 5}",0,151.5,5420,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t04,1,tb3,run_skill,route_generation,"{""max_routes"": 5}",0,147.6,5435,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t04,1,tb4,run_skill,synthesis_feasibility,"{""best_route_metric"": ""most_available""}",0,146.2,5397,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t04,1,tb5,run_skill,route_generation,"{""max_routes"": 10}",0,149.2,5456,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t05,1,tb1,list_skills,none,none,2,0,0,no,True,none,skills
+t05,1,tb2,list_skills,none,none,0,55.9,5471,no,True,none,skills
+t05,1,tb3,help_skill,route_generation,none,0,36.2,5428,no,True,none,description;name;parameters
+t05,1,tb4,help_skill,route_analysis,none,0,33.5,5455,no,True,none,description;name;parameters
+t05,1,tb5,help_skill,building_block_availability,none,0,33.6,5466,no,True,none,description;name;parameters
+t05,1,tb6,help_skill,route_comparison,none,0,33.2,5456,no,True,none,description;name;parameters
+t05,1,tb7,help_skill,synthesis_feasibility,none,0,32.7,5456,no,True,none,description;name;parameters
+t05,1,tb8,help_skill,expander,none,0,33.2,5459,no,True,none,description;name;parameters
+t05,1,tb9,help_skill,search_config,none,0,34.0,5459,no,True,none,description;name;parameters
+t05,1,tb10,help_skill,policy_management,none,0,35.6,5462,no,True,none,description;name;parameters
+t05,1,tb11,help_skill,stock_management,none,0,33.7,5470,no,True,none,description;name;parameters
+t05,1,tb12,help_skill,route_clustering,none,0,33.5,5401,no,True,none,description;name;parameters
+t05,1,tb13,help_skill,reaction_score,none,0,32.7,5440,no,True,none,description;name;parameters
+t05,1,tb14,route_query,none,none,0,54.7,5396,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t05,1,tb15,run_skill,synthesis_feasibility,none,0,51.0,5418,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t06,1,tb1,list_skills,none,none,0,39.9,5562,no,True,none,skills
+t06,1,tb2,route_query,none,none,0,52.0,5484,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb3,route_query,none,none,0,57.3,5525,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb4,route_query,none,none,0,54.3,5508,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb5,route_query,none,none,0,64.6,5460,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb6,route_query,none,none,0,62.4,5510,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb7,route_query,none,none,0,60.7,5497,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb8,route_query,none,none,0,58.5,5529,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb9,route_query,none,none,0,56.3,5529,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t01,1,tb1,run_skill,route_generation,"{""max_routes"": 3}",137,15.0,5309,oom,none,none,none
+t05,1,tb1,none,none,none,2,0,0,no,none,none,none
+t05,1,tb2,none,none,none,1,4.2,780,no,False,ValueError,none
+t05,1,tb3,run_skill,route_generation,"{""max_routes"": 3}",137,10.5,5189,oom,none,none,none
+t05,1,tb4,run_skill,route_generation,"{""max_routes"": 3}",137,17.3,5199,oom,none,none,none
+t06,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",137,17.8,5281,oom,none,none,none
+t06,1,tb2,run_skill,route_generation,"{""max_routes"": 5}",137,17.1,5274,oom,none,none,none
+t06,1,tb3,run_skill,route_generation,"{""max_routes"": 5}",137,16.3,5230,oom,none,none,none
+t06,1,tb4,run_skill,route_generation,"{""max_routes"": 5}",137,16.3,5240,oom,none,none,none
+c01,1,tb1,run_skill,synthesis_feasibility,"{""max_depth"": 10, ""max_steps"": 5, ""min_confidence"": 0.3}",0,59.6,5326,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+c01,1,tb2,run_skill,synthesis_feasibility,"{""max_depth"": 10, ""max_steps"": 5, ""min_confidence"": 0.3}",0,59.7,5319,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+c02,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,54.9,5307,no,True,none,message;metadata;routes;search_time;stereo_check;success
+c03,1,tb1,run_skill,synthesis_feasibility,"{""max_depth"": 10, ""max_steps"": 5, ""min_confidence"": 0.5}",0,54.9,5278,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+c04,1,tb1,run_skill,synthesis_feasibility,"{""best_route_metric"": ""shortest"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,84.8,5309,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t01,1,tb1,run_skill,route_generation,"{""max_routes"": 3}",0,76.5,5376,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t05,1,tb1,none,none,none,2,0,0,no,none,none,none
+t05,1,tb2,list_skills,none,none,2,0,0,no,none,none,none
+t05,1,tb3,run_skill,route_generation,"{""max_routes"": 3}",0,53.1,5398,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t05,1,tb4,run_skill,route_generation,"{""max_routes"": 3}",0,49.5,5406,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t05,1,tb5,run_skill,route_generation,"{""max_routes"": 3}",0,51.1,5377,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,54.7,5391,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb2,run_skill,route_generation,"{""max_routes"": 5}",0,51.5,5410,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb3,run_skill,route_generation,"{""max_routes"": 5}",0,52.1,5395,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb4,run_skill,route_generation,"{""max_routes"": 5}",0,53.1,5371,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t07,1,tb1,list_skills,none,none,0,34.3,5377,no,True,none,skills
+t07,1,tb2,route_query,none,none,0,33.0,5397,no,True,molecule_not_found,error;message;success
+t07,1,tb3,run_skill,route_generation,"{""max_routes"": 3}",0,64.5,5371,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t08,1,tb1,list_skills,none,none,0,58.2,5388,no,True,none,skills
+t08,1,tb2,list_skills,none,none,0,56.2,5384,no,True,none,skills
+t08,1,tb3,none,none,none,2,0,0,no,none,none,none
+t08,1,tb4,route_query,none,none,0,55.6,5390,no,True,needs_structured_input,error;hint;required_fields;success
+t08,1,tb5,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence""}",0,161.9,5269,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t08,1,tb6,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_steps"": 6, ""min_confidence"": 0.3}",0,56.3,5390,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t08,1,tb7,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_steps"": 6, ""min_confidence"": 0.3}",0,110.7,5380,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t08,1,tb8,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_depth"": 15, ""max_steps"": 6, ""min_confidence"": 0.3}",0,108.9,5379,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t09,1,tb1,run_skill,synthesis_feasibility,"{""best_route_metric"": ""shortest"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,135.6,5370,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t12,1,tb1,list_skills,none,none,0,62.9,5380,no,True,none,skills
+t12,1,tb2,route_query,none,none,0,63.8,5392,no,True,molecule_not_found,error;message;success
+t12,1,tb3,route_query,none,none,0,58.4,5396,no,True,molecule_not_found,error;message;success
+t13,1,tb1,list_skills,none,none,0,60.6,5373,no,True,none,skills
+t13,1,tb2,run_skill,route_generation,"{""max_routes"": 3}",1,59.4,5404,no,False,AttributeError,none
+t13,1,tb3,run_skill,route_generation,"{""max_routes"": 3}",0,59.4,5406,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t13,1,tb4,run_skill,route_generation,"{""max_routes"": 3}",1,60.0,5374,no,False,AttributeError,none
+t13,1,tb5,run_skill,route_generation,"{""max_routes"": 1}",0,98.6,5383,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t13,1,tb6,run_skill,route_generation,"{""max_routes"": 3}",0,144.3,5402,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t13,1,tb7,run_skill,route_generation,"{""max_routes"": 3}",0,147.7,5372,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t14,1,tb1,list_skills,none,none,0,36.9,5334,no,True,none,skills
+t14,1,tb2,run_skill,synthesis_feasibility,"{""max_routes"": 5, ""max_steps"": 5, ""min_confidence"": 0.3}",0,78.5,5396,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t14,1,tb3,batch_generate_routes,none,"{""max_routes"": 3, ""n_workers"": 1, ""pool_size"": 1}",0,413.9,5369,no,True,none,n_cache_hits;n_failed;n_success;results;throughput_mol_per_min;total_time_s
+t17,1,tb1,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,55.4,5368,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t18,1,tb1,run_skill,synthesis_feasibility,"{""max_routes"": 5}",0,86.9,5344,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t18,1,tb2,run_skill,route_generation,"{""max_routes"": 8}",0,83.1,5406,no,True,none,message;metadata;routes;search_time;stereo_check;success
+x16,1,tb1,none,none,none,1,0.1,39,no,none,none,none
+x16,1,tb2,none,none,none,1,9.8,776,no,False,ValueError,none
+x16,1,tb3,screen,none,none,1,7.2,780,no,False,ValueError,none
+x5,1,tb1,none,none,none,1,0.2,38,no,none,none,none
+x56,1,tb1,none,none,none,2,0,0,no,none,none,none
+x56,1,tb2,list_skills,none,none,0,137.0,5412,no,True,none,skills
+x66,1,tb1,list_skills,none,none,0,68.0,5414,no,True,none,skills
+x66,1,tb2,route_query,none,none,0,65.8,5440,no,True,molecule_not_found,error;message;success
+x66,1,tb3,run_skill,synthesis_feasibility,none,1,65.4,5430,no,False,TypeError,none
+x66,1,tb4,load_model,none,none,1,17.2,777,no,False,ValueError,none
+x66,1,tb5,list_skills,none,none,0,51.4,5459,no,True,none,skills
+c01,1,tb1,run_skill,synthesis_feasibility,"{""max_steps"": 5, ""min_confidence"": 0.3}",0,58.3,5445,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+c02,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,52.2,5485,no,True,none,message;metadata;routes;search_time;stereo_check;success
+c02,1,tb2,run_skill,route_analysis,none,0,31.3,5601,no,True,none,depth;num_intermediates;num_steps
+c02,1,tb3,run_skill,building_block_availability,none,0,36.0,5543,no,True,none,availability_ratio;available_precursors;message;unavailable_precursors
+c03,1,tb1,run_skill,synthesis_feasibility,"{""min_confidence"": 0.5}",0,51.9,5548,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+c04,1,tb1,run_skill,synthesis_feasibility,none,0,82.3,5456,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t01,1,tb1,list_skills,none,none,0,41.2,5673,no,True,none,skills
+t01,1,tb2,run_skill,route_generation,"{""max_routes"": 5}",0,95.9,5212,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t01,1,tb3,run_skill,route_comparison,none,0,30.1,5600,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+t03,1,tb1,run_skill,synthesis_feasibility,"{""max_steps"": 5, ""min_confidence"": 0.3}",0,56.1,5318,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t04,1,tb1,run_skill,synthesis_feasibility,none,0,81.9,5486,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t04,1,tb2,run_skill,synthesis_feasibility,none,0,82.2,5543,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t04,1,tb3,run_skill,route_comparison,none,0,33.6,5532,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+t05,1,tb1,list_skills,none,none,0,38.7,5448,no,True,none,skills
+t05,1,tb2,help_skill,route_generation,none,0,34.7,5536,no,True,none,description;name;parameters
+t05,1,tb3,none,none,none,2,0,0,no,none,none,none
+t05,1,tb4,none,none,none,2,0,0,no,none,none,none
+t05,1,tb5,help_skill,route_generation,none,0,40.2,5590,no,True,none,description;name;parameters
+t05,1,tb6,help_skill,synthesis_feasibility,none,0,40.4,5529,no,True,none,description;name;parameters
+t06,1,tb1,run_skill,route_generation,"{""max_routes"": 10}",0,52.2,5592,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t06,1,tb2,run_skill,route_generation,"{""max_routes"": 10}",0,49.3,5652,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t07,1,tb1,list_skills,none,none,0,37.3,5474,no,True,none,skills
+t07,1,tb2,run_skill,synthesis_feasibility,"{""max_routes"": 10, ""max_steps"": 5, ""min_confidence"": 0.3}",0,70.1,5495,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t07,1,tb3,list_skills,none,none,1,0.2,38,no,none,none,none
+t08,1,tb1,list_skills,none,none,0,33.9,5564,no,True,none,skills
+t08,1,tb2,help_skill,toxicity_prediction,none,1,38.7,5408,no,False,ValueError,none
+t08,1,tb3,run_skill,route_generation,"{""max_routes"": 1}",0,41.3,5582,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t08,1,tb4,route_query,none,none,0,37.6,5474,no,True,molecule_not_found,error;message;success
+t09,1,tb1,run_skill,route_generation,"{""max_routes"": 10}",0,47.6,5430,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t09,1,tb2,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,41.2,5608,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t09,1,tb3,run_skill,synthesis_feasibility,"{""best_route_metric"": ""highest_confidence"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,70.2,5475,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t09,1,tb4,list_skills,none,none,0,31.8,5604,no,True,none,skills
+t09,1,tb5,run_skill,synthesis_feasibility,"{""best_route_metric"": ""shortest"", ""max_steps"": 5, ""min_confidence"": 0.3}",0,75.9,5557,no,True,none,best_route;best_route_index;best_route_stats;is_feasible;message;num_routes;reason;routes;threshold_results
+t09,1,tb6,run_skill,route_comparison,none,0,35.7,5584,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+t12,1,tb1,list_skills,none,none,0,41.3,5420,no,True,none,skills
+t12,1,tb2,help_skill,route_generation,none,0,38.7,5473,no,True,none,description;name;parameters
+t14,1,tb1,list_skills,none,none,0,31.7,5639,no,True,none,skills
+t15,1,tb1,list_skills,none,none,0,35.5,5500,no,True,none,skills
+t15,1,tb2,run_skill,policy_management,none,0,39.3,5476,no,True,none,available;message;selected;success
+t15,1,tb3,help_skill,policy_management,none,0,33.6,5629,no,True,none,description;name;parameters
+t16,1,tb1,list_skills,none,none,0,38.9,5416,no,True,none,skills
+t17,1,tb1,run_skill,route_generation,"{""max_routes"": 10}",0,50.3,5637,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t17,1,tb2,run_skill,route_comparison,none,0,36.7,5513,no,True,none,highest_confidence_index;message;most_available_index;shortest_route_index;summary
+t17,1,tb3,run_skill,reaction_score,"{""scorer"": ""route cost""}",0,34.1,5598,no,True,none,message;per_reaction_scores;scored_routes;success
+t18,1,tb1,run_skill,route_generation,"{""max_routes"": 5}",0,86.1,5478,no,True,none,message;metadata;routes;search_time;stereo_check;success
+t18,1,tb2,list_skills,none,none,0,32.9,5507,no,True,none,skills

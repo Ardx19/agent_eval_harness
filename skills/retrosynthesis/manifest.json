@@ -1,0 +1,515 @@
+{
+  "schema_version": 1,
+  "name": "retrosynthesis",
+  "description": "Use AiZynthFinder-based retrosynthesis skills to generate routes, analyze steps, check building block availability, compare routes, assess synthesis feasibility, configure search parameters, manage policies and stocks, cluster routes, score reactions, and perform single-step molecular expansion for drug molecules. Trigger when the user provides a SMILES string and asks about synthesis, retrosynthesis, routes, precursors, synthesizability, pathway, synthetic route, building blocks, starting materials, feasibility, feasible, retrosynthetic, disconnection, in stock, available, compare routes, best route, configure search, expand molecule, cluster routes, score reactions, policy management, stock management.",
+  "entrypoint": {
+    "path": "scripts/run_retrosynthesis.sh",
+    "argv0": "run_retrosynthesis.sh",
+    "target": "/usr/local/bin/toolstub"
+  },
+  "host": {
+    "dir": "/home/aryandutt/home/BTP/Pi",
+    "command": [
+      "scripts/run_retrosynthesis.sh"
+    ],
+    "timeout_s": 900,
+    "serialize": true,
+    "scrub_prefixes": [
+      "/home/aryandutt/home/BTP/Pi",
+      "/home/aryandutt/miniconda3/envs/aizynth-env",
+      "/home/aryandutt/miniconda3"
+    ]
+  },
+  "cli": {
+    "flags": [
+      {
+        "name": "--request",
+        "takes_file": true
+      },
+      {
+        "name": "--list-skills",
+        "takes_file": false,
+        "implies_request": "{\"mode\":\"list_skills\"}"
+      }
+    ],
+    "stdin_json": true
+  },
+  "modes": [
+    {
+      "name": "list_skills",
+      "required": [],
+      "summary": "List the skills."
+    },
+    {
+      "name": "help_skill",
+      "required": [
+        "skill"
+      ],
+      "summary": "Describe one skill."
+    },
+    {
+      "name": "route_query",
+      "required": [
+        "query"
+      ],
+      "summary": "Natural-language request, routed to a skill by keyword matching."
+    },
+    {
+      "name": "run_skill",
+      "required": [
+        "skill",
+        "kwargs"
+      ],
+      "summary": "Run one skill with structured arguments (preferred when the intent is clear)."
+    },
+    {
+      "name": "batch_generate_routes",
+      "required": [
+        "smiles_list"
+      ],
+      "summary": "Generate routes for many molecules in one call."
+    },
+    {
+      "name": "batch_assess_feasibility",
+      "required": [
+        "smiles_list"
+      ],
+      "summary": "Assess feasibility of many molecules in one call."
+    }
+  ],
+  "top_level": [
+    {
+      "name": "mode",
+      "type": "string",
+      "required": true,
+      "enum": [
+        "route_query",
+        "run_skill",
+        "list_skills",
+        "help_skill",
+        "batch_generate_routes",
+        "batch_assess_feasibility"
+      ]
+    },
+    {
+      "name": "query",
+      "type": "string"
+    },
+    {
+      "name": "skill",
+      "type": "string"
+    },
+    {
+      "name": "kwargs",
+      "type": "object"
+    },
+    {
+      "name": "smiles_list",
+      "type": "array"
+    },
+    {
+      "name": "pool_size",
+      "type": "integer",
+      "min": 1
+    },
+    {
+      "name": "config",
+      "type": "object"
+    },
+    {
+      "name": "max_routes",
+      "type": "integer",
+      "min": 1
+    },
+    {
+      "name": "max_depth",
+      "type": "integer",
+      "min": 1
+    },
+    {
+      "name": "deduplicate",
+      "type": "boolean"
+    },
+    {
+      "name": "n_workers",
+      "type": "integer",
+      "min": 1
+    },
+    {
+      "name": "best_route_metric",
+      "type": "string",
+      "enum": [
+        "most_available",
+        "shortest",
+        "highest_confidence"
+      ]
+    },
+    {
+      "name": "max_steps",
+      "type": "integer",
+      "min": 1
+    },
+    {
+      "name": "min_availability",
+      "type": "number",
+      "min": 0,
+      "max": 1
+    },
+    {
+      "name": "min_confidence",
+      "type": "number",
+      "min": 0,
+      "max": 1
+    },
+    {
+      "name": "max_intermediates",
+      "type": "integer",
+      "min": 0
+    }
+  ],
+  "skills": [
+    {
+      "name": "route_generation",
+      "summary": "Generates retrosynthesis routes for a target molecule.",
+      "speed": "Slow (about 10-30 s of search, on top of the per-call model load).",
+      "params": [
+        {
+          "name": "smiles",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "max_routes",
+          "type": "integer",
+          "default": 10,
+          "min": 1,
+          "notes": "first N unique routes"
+        },
+        {
+          "name": "config",
+          "type": "object",
+          "notes": "search settings, see FinderConfig"
+        },
+        {
+          "name": "max_depth",
+          "type": "integer",
+          "min": 1
+        },
+        {
+          "name": "deduplicate",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "response": "`success`, `routes` (list of route trees), `search_time`, `message`, `metadata` (`routes_requested`, `routes_found`, `routes_unique`, `config_hash`, `stock_used`, `policies_used`, `cache_hit`)."
+    },
+    {
+      "name": "route_analysis",
+      "summary": "Analyzes a single route tree for steps, intermediates and depth.",
+      "speed": "Fast tree walk (the per-call model load still applies).",
+      "params": [
+        {
+          "name": "route",
+          "type": "object",
+          "required": true,
+          "notes": "a route tree"
+        }
+      ],
+      "response": "`num_steps`, `num_intermediates`, `depth`."
+    },
+    {
+      "name": "building_block_availability",
+      "summary": "Checks precursor availability from the `in_stock` fields of a route tree.",
+      "params": [
+        {
+          "name": "route",
+          "type": "object",
+          "required": true,
+          "notes": "a route tree"
+        }
+      ],
+      "response": "`available_precursors` (SMILES list), `unavailable_precursors`, `availability_ratio`, `message`."
+    },
+    {
+      "name": "route_comparison",
+      "summary": "Compares routes and identifies the best by steps, availability and confidence.",
+      "params": [
+        {
+          "name": "routes",
+          "type": "array",
+          "required": true,
+          "notes": "list of route trees"
+        }
+      ],
+      "response": "`shortest_route_index`, `most_available_index`, `highest_confidence_index`, `summary` (per-route stats), `message`."
+    },
+    {
+      "name": "synthesis_feasibility",
+      "summary": "End-to-end feasibility assessment. Composes route generation, analysis, availability and comparison.",
+      "speed": "Slow (about 10-30 s, on top of the per-call model load).",
+      "params": [
+        {
+          "name": "smiles",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "best_route_metric",
+          "type": "string",
+          "enum": [
+            "most_available",
+            "shortest",
+            "highest_confidence"
+          ]
+        },
+        {
+          "name": "max_steps",
+          "type": "integer",
+          "default": 5,
+          "min": 1
+        },
+        {
+          "name": "min_availability",
+          "type": "number",
+          "default": 0.5,
+          "min": 0,
+          "max": 1
+        },
+        {
+          "name": "min_confidence",
+          "type": "number",
+          "default": 0.3,
+          "min": 0,
+          "max": 1,
+          "notes": "0.6 is unrealistically high and rejects nearly all routes"
+        },
+        {
+          "name": "max_intermediates",
+          "type": "integer",
+          "default": 6,
+          "min": 0
+        },
+        {
+          "name": "max_depth",
+          "type": "integer",
+          "min": 1
+        },
+        {
+          "name": "stock",
+          "type": "string",
+          "default": "zinc"
+        },
+        {
+          "name": "config",
+          "type": "object",
+          "notes": "wins over `stock` if both are given"
+        }
+      ],
+      "response": "`is_feasible`, `reason`, `num_routes`, `best_route_index`, `best_route_stats`, `best_route`, `routes`, `threshold_results`, `message`.",
+      "notes": "`config` vs `stock`: if `config` is supplied it wins (it already carries `stock` plus time and iteration limits and policies); a non-default `stock` alongside `config` produces a warning and is ignored. `max_depth` limits **route length** (a `max_transforms` clamp), which is related to but not the same as the tree depth that `route_analysis` reports; omitting it means unconstrained."
+    },
+    {
+      "name": "expander",
+      "summary": "Single-step molecular expansion without a full tree search.",
+      "speed": "Slow.",
+      "params": [
+        {
+          "name": "smiles",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "return_n",
+          "type": "integer",
+          "default": 5,
+          "min": 1
+        },
+        {
+          "name": "config_path",
+          "type": "string"
+        }
+      ],
+      "response": "`reactions` (each with `reactants_smiles`, `reaction_smiles` and metadata), `success`, `message`."
+    },
+    {
+      "name": "search_config",
+      "summary": "Reads MCTS search configuration. **Read-only:** overrides are validated, never applied, and the response carries `\"applied\": false`.",
+      "speed": "Slow.",
+      "params": [
+        {
+          "name": "config_path",
+          "type": "string"
+        },
+        {
+          "name": "iteration_limit",
+          "type": "integer",
+          "min": 1
+        },
+        {
+          "name": "time_limit",
+          "type": "number",
+          "min": 0
+        },
+        {
+          "name": "max_transforms",
+          "type": "integer",
+          "min": 1
+        },
+        {
+          "name": "C",
+          "type": "number"
+        },
+        {
+          "name": "return_first",
+          "type": "boolean"
+        },
+        {
+          "name": "exclude_target_from_stock",
+          "type": "boolean"
+        },
+        {
+          "name": "break_bonds",
+          "type": "array"
+        },
+        {
+          "name": "freeze_bonds",
+          "type": "array"
+        },
+        {
+          "name": "break_bonds_operator",
+          "type": "string",
+          "enum": [
+            "and",
+            "or"
+          ]
+        }
+      ],
+      "response": "`config` (the active search configuration), `success`, `message`, `applied` (always `false`)."
+    },
+    {
+      "name": "policy_management",
+      "summary": "Lists the available expansion and filter policies (fast), or selects or deselects one (slow).",
+      "speed": "Hybrid: fast for `list`, slow for `select`/`deselect`.",
+      "params": [
+        {
+          "name": "action",
+          "type": "string",
+          "enum": [
+            "list",
+            "select",
+            "deselect"
+          ]
+        },
+        {
+          "name": "policy_type",
+          "type": "string",
+          "enum": [
+            "expansion",
+            "filter"
+          ],
+          "notes": "for select/deselect"
+        },
+        {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "config_path",
+          "type": "string"
+        }
+      ],
+      "response": "`available` (dict), `selected` (dict of live selections), `success`, `message`."
+    },
+    {
+      "name": "stock_management",
+      "summary": "Lists the available stocks (`zinc`, `mcule`), or selects or deselects one.",
+      "speed": "Hybrid: fast for `list`, slow for `select`/`deselect`.",
+      "params": [
+        {
+          "name": "action",
+          "type": "string",
+          "enum": [
+            "list",
+            "select",
+            "deselect"
+          ]
+        },
+        {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "config_path",
+          "type": "string"
+        }
+      ],
+      "response": "`available` (dict), `selected` (the live selection **list**, not a string), `success`, `message`."
+    },
+    {
+      "name": "route_clustering",
+      "summary": "Clusters routes by structural similarity and computes a pairwise distance matrix.",
+      "speed": "Slow.",
+      "params": [
+        {
+          "name": "routes",
+          "type": "array",
+          "required": true
+        },
+        {
+          "name": "n_clusters",
+          "type": "integer",
+          "default": 5,
+          "min": 1
+        },
+        {
+          "name": "max_clusters",
+          "type": "integer",
+          "default": 5,
+          "min": 1
+        },
+        {
+          "name": "config_path",
+          "type": "string"
+        }
+      ],
+      "response": "`labels` (cluster per route), `distance_matrix`, `success`, `message`."
+    },
+    {
+      "name": "reaction_score",
+      "summary": "Scores routes with built-in scorers and can extract per-reaction metadata.",
+      "speed": "Slow.",
+      "params": [
+        {
+          "name": "routes",
+          "type": "array",
+          "required": true
+        },
+        {
+          "name": "scorer",
+          "type": "string",
+          "default": "state score"
+        },
+        {
+          "name": "include_per_reaction",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "config_path",
+          "type": "string"
+        }
+      ],
+      "response": "`scored_routes`, `per_reaction_scores`, `success`, `message`.",
+      "notes": "Built-in scorers: `state score`, `number of reactions`, `number of pre-cursors`, `number of pre-cursors in stock`, `route cost`. An unknown scorer name returns an error that lists the available ones."
+    }
+  ],
+  "leak_patterns": [
+    "BTP",
+    "aryandutt",
+    "Aizynthfinder/"
+  ],
+  "output_signatures": [
+    "\"tool\":\\s*\"retrosynthesis\"",
+    "^\\s*\\{\\s*\"ok\":\\s*(true|false)"
+  ]
+}

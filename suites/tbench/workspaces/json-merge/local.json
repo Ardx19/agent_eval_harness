@@ -1,0 +1,11 @@
+{
+  "server": {
+    "host": "127.0.0.1"
+  },
+  "log": {
+    "level": "debug"
+  },
+  "features": [
+    "z"
+  ]
+}

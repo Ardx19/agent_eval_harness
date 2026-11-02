@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "tool": "retrosynthesis",
+  "mode": "batch_generate_routes",
+  "result": null,
+  "error": "TypeError: unknown key(s) ['max_routs'] for mode=batch_generate_routes; accepted: ['config', 'max_routes', 'n_workers', 'pool_size', 'smiles_list']"
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

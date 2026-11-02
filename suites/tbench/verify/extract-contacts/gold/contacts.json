@@ -1,0 +1,12 @@
+{
+  "emails": [
+    "dana.lee@example.com",
+    "ops-team@example.org",
+    "sales@vendor.example.net"
+  ],
+  "phones": [
+    "2125550107",
+    "4155550132",
+    "4155550199"
+  ]
+}

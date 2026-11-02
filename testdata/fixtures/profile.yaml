@@ -1,0 +1,12 @@
+agent: pi
+provider: google
+model: gemini-3.5-flash-lite
+skill_runner: stub
+tool_mode: cold
+budget_usd: 5
+concurrency: 1
+vm_mem_mib: 1536
+limits:
+  wall_s: 600
+  tokens: 200000
+  mem_mb: 4096

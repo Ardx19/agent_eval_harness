@@ -1,0 +1,8 @@
+{
+ "instance_id": "sales-report",
+ "kind": "script",
+ "fail_to_pass": [
+  "report-correct"
+ ],
+ "pass_to_pass": []
+}

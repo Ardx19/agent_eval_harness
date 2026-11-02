@@ -1,0 +1,9 @@
+{
+ "instance_id": "json-merge",
+ "kind": "script",
+ "fail_to_pass": [
+  "merge-script-exists",
+  "effective-correct"
+ ],
+ "pass_to_pass": []
+}

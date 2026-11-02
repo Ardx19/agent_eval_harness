@@ -1,0 +1,14 @@
+# SWE-bench-Lite-style tasks with a free opencode model.
+agent: opencode
+provider: opencode
+model: mimo-v2.6-flash-free
+api: openai
+upstream: https://opencode.ai/zen
+skills: []
+realism: off
+vm_mem_mib: 2048
+concurrency: 2
+budget_usd: 8
+limits:
+  wall_s: 1500
+  tokens: 3000000

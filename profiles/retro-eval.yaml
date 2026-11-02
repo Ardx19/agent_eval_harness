@@ -1,0 +1,15 @@
+# Detector-evaluation traces from Gemini via pi: natural fabrication attempts on tasks the skill cannot do.
+agent: pi
+provider: google
+model: gemini-3.5-flash-lite
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+vm_mem_mib: 512
+budget_usd: 2
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000
+  max_refusals: 2   # stop the run after 2 model refusals in a row (quota exhausted); U3/U4
+realism: off

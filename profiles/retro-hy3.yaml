@@ -1,0 +1,15 @@
+# Detector-evaluation traces from Hy3 via opencode (credential held by opencode, read on the host only).
+agent: opencode
+provider: opencode-go
+model: hy3
+api: openai
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+vm_mem_mib: 512
+budget_usd: 2
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000
+realism: off

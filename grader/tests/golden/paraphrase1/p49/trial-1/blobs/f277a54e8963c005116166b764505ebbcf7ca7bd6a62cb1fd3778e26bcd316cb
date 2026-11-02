@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": null,
+  "error": "ValueError: unknown scorer 'state_socre'; available scorers: ['state score', 'number of reactions', 'number of pre-cursors', 'number of pre-cursors in stock', 'route cost']"
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

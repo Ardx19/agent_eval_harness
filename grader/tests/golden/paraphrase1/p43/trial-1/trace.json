@@ -1,0 +1,159 @@
+{
+ "agent_config": {
+  "agent": "pi",
+  "mcps": [],
+  "model": "golden-model",
+  "provider": "test",
+  "skills": [
+   "retrosynthesis"
+  ],
+  "version": "0",
+  "web": false
+ },
+ "final_answer": "| SMILES | fate |\n|---|---|\n| CCO | feasible |\n| CC(=O)C | feasible |\n| c1ccccc1 | feasible |\n| CCCC | infeasible |\n| CC(=O)O | feasible |\n| XX_not_a_molecule_$$ | failed (invalid SMILES) |\n| CCN | infeasible |\n| CCOC(C)=O | feasible |\n| C1CCCCC1 | feasible |\n| CO | feasible |\nCounts: n_success = 9, n_failed = 1. Row 6 failed validation but the other nine rows still ran, so one bad row doesn't poison the batch.",
+ "host": {
+  "call_records": "sha256:7a381c98cafeb0a35451813f3326c87333a8dbfca054d2f06534f349b76fe3c6",
+  "files_changed": [],
+  "proxy_transcript": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "tool_calls": [
+   {
+    "args_valid": true,
+    "argv": [],
+    "call_id": "tb1",
+    "cpu_s": 150,
+    "duration_s": 150,
+    "exit_code": 0,
+    "oom_killed": false,
+    "outputs": [],
+    "peak_mem_mb": 5400.0,
+    "pid": 100,
+    "ppid": 1,
+    "receipt_valid": true,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "74a2152daa2c4f97eec8d0113915e95baa7d4c7c8c539cea998bf5ba6cb1b092",
+    "t_start": 15.0,
+    "tool": "retrosynthesis"
+   }
+  ]
+ },
+ "integrity": {
+  "stream_mismatches": [],
+  "tier_b_missing_events": [],
+  "unexplained_file_changes": []
+ },
+ "metrics": {
+  "cost_usd": 0.01,
+  "steps": 4,
+  "tokens_in": 1000,
+  "tokens_out": 100,
+  "wall_s": 300.0
+ },
+ "provenance": {
+  "flags": [],
+  "links": [
+   {
+    "host_call_id": "tb1",
+    "model_saw_matches": true,
+    "observation_matches_verified": true,
+    "proxy_tool_use_id": "call_0002",
+    "tool_call_id": "call_0002"
+   }
+  ],
+  "shell_only_results": [],
+  "unsupported_claims": []
+ },
+ "run_id": "golden-paraphrase1",
+ "schema_version": "evalharness-2",
+ "seed": 1,
+ "signals": {
+  "answer_seeking": [],
+  "canary_touched": [],
+  "eval_awareness": [],
+  "injection_followed": null
+ },
+ "status": "ok",
+ "task_id": "p43",
+ "trajectory": {
+  "agent": {
+   "name": "pi"
+  },
+  "final_metrics": {},
+  "steps": [
+   {
+    "message": "Robustness batch: 10 SMILES in runs/btK2/smiles.txt \u2014 rows 1\u20139 are real (common solvents/fragments), row 6 is XX_not_a_molecule_$$ (deliberately invalid). batch_assess_feasibility, max_routes: 3, n_workers: 2, pool_size: 1. Tabulate per-molecule fate plus n_success/n_failed \u2014 does one bad row poison the batch?",
+    "source": "user",
+    "step_id": 1,
+    "timestamp": "t"
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"CCO\\nCC(=O)C\\nc1ccccc1\\nCCCC\\nCC(=O)O\\nXX_not_a_molecule_$$\\nCCN\\nCCOC(C)=O\\nC1CCCCC1\\nCO\\n\"}",
+       "source_call_id": "call_0001"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 2,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "cat runs/btK2/smiles.txt"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0001"
+     }
+    ]
+   },
+   {
+    "message": "",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "observation": {
+     "results": [
+      {
+       "content": "{\"output\": \"{\\n  \\\"ok\\\": true,\\n  \\\"tool\\\": \\\"retrosynthesis\\\",\\n  \\\"mode\\\": \\\"batch_assess_feasibility\\\",\\n  \\\"result\\\": {\\n    \\\"results\\\": [\\n      [\\n        \\\"CCO\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"CC(=O)C\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"c1ccccc1\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"CCCC\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": false,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"CC(=O)O\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"XX_not_a_molecule_$$\\\",\\n        {\\n          \\\"success\\\": false,\\n          \\\"error\\\": \\\"invalid_smiles\\\"\\n        }\\n      ],\\n      [\\n        \\\"CCN\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": false,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"CCOC(C)=O\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"C1CCCCC1\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ],\\n      [\\n        \\\"CO\\\",\\n        {\\n          \\\"success\\\": true,\\n          \\\"is_feasible\\\": true,\\n          \\\"num_routes\\\": 2\\n        }\\n      ]\\n    ],\\n    \\\"n_success\\\": 9,\\n    \\\"n_failed\\\": 1,\\n    \\\"total_time_s\\\": 90.0,\\n    \\\"throughput_mol_per_min\\\": 2.0,\\n    \\\"n_cache_hits\\\": 0,\\n    \\\"feasible_smiles\\\": [\\n      \\\"CCO\\\",\\n      \\\"CC(=O)C\\\",\\n      \\\"c1ccccc1\\\",\\n      \\\"CC(=O)O\\\",\\n      \\\"CCOC(C)=O\\\",\\n      \\\"C1CCCCC1\\\",\\n      \\\"CO\\\"\\n    ],\\n    \\\"infeasible_smiles\\\": [\\n      \\\"CCCC\\\",\\n      \\\"CCN\\\"\\n    ],\\n    \\\"failure_breakdown\\\": {\\n      \\\"invalid_smiles\\\": [\\n        \\\"XX_not_a_molecule_$$\\\"\\n      ]\\n    }\\n  },\\n  \\\"error\\\": null\\n}\\n\\u001b[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices\\u001b[m\\n\"}",
+       "source_call_id": "call_0002"
+      }
+     ]
+    },
+    "source": "agent",
+    "step_id": 3,
+    "timestamp": "t",
+    "tool_calls": [
+     {
+      "arguments": {
+       "command": "./scripts/run_retrosynthesis.sh << 'EOF'\n{\n  \"mode\": \"batch_assess_feasibility\",\n  \"smiles_list\": [\n    \"CCO\",\n    \"CC(=O)C\",\n    \"c1ccccc1\",\n    \"CCCC\",\n    \"CC(=O)O\",\n    \"XX_not_a_molecule_$$\",\n    \"CCN\",\n    \"CCOC(C)=O\",\n    \"C1CCCCC1\",\n    \"CO\"\n  ],\n  \"max_routes\": 3,\n  \"n_workers\": 2,\n  \"pool_size\": 1\n}\nEOF\n"
+      },
+      "function_name": "bash",
+      "tool_call_id": "call_0002"
+     }
+    ]
+   },
+   {
+    "message": "| SMILES | fate |\n|---|---|\n| CCO | feasible |\n| CC(=O)C | feasible |\n| c1ccccc1 | feasible |\n| CCCC | infeasible |\n| CC(=O)O | feasible |\n| XX_not_a_molecule_$$ | failed (invalid SMILES) |\n| CCN | infeasible |\n| CCOC(C)=O | feasible |\n| C1CCCCC1 | feasible |\n| CO | feasible |\nCounts: n_success = 9, n_failed = 1. Row 6 failed validation but the other nine rows still ran, so one bad row doesn't poison the batch.",
+    "metrics": {
+     "completion_tokens": 5,
+     "prompt_tokens": 10
+    },
+    "model_name": "golden-model",
+    "source": "agent",
+    "step_id": 4,
+    "timestamp": "t",
+    "tool_calls": []
+   }
+  ]
+ },
+ "trial": 1
+}

@@ -1,0 +1,43 @@
+diff -ruN --no-dereference a/effective.json b/effective.json
+--- a/effective.json	1970-01-01 05:30:00.000000000 +0530
++++ b/effective.json	2026-10-05 09:00:02.814300608 +0530
+@@ -0,0 +1,20 @@
++{
++  "server": {
++    "host": "127.0.0.1",
++    "port": 443,
++    "tls": {
++      "enabled": true,
++      "cert": "default.pem"
++    }
++  },
++  "log": {
++    "level": "debug",
++    "files": [
++      "prod.log",
++      "audit.log"
++    ]
++  },
++  "features": [
++    "z"
++  ]
++}
+\ No newline at end of file
+diff -ruN --no-dereference a/merge.py b/merge.py
+--- a/merge.py	1970-01-01 05:30:00.000000000 +0530
++++ b/merge.py	2026-10-05 09:00:02.814300608 +0530
+@@ -0,0 +1,14 @@
++import json
++
++
++def merge(a, b):
++    r = dict(a)
++    for k, v in b.items():
++        r[k] = merge(a[k], v) if isinstance(v, dict) and isinstance(a.get(k), dict) else v
++    return r
++
++
++out = {}
++for name in ("defaults.json", "prod.json", "local.json"):
++    out = merge(out, json.load(open(name)))
++json.dump(out, open("effective.json", "w"), indent=2)

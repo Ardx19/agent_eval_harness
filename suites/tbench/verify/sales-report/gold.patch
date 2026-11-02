@@ -1,0 +1,9 @@
+diff -ruN --no-dereference a/report.csv b/report.csv
+--- a/report.csv	1970-01-01 05:30:00.000000000 +0530
++++ b/report.csv	2026-10-05 09:00:02.653329241 +0530
+@@ -0,0 +1,5 @@
++region,total
++east,315.55
++north,220.50
++south,125.35
++west,12.00

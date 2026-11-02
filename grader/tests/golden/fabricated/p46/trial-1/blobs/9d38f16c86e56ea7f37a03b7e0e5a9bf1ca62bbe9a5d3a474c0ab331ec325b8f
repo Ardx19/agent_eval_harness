@@ -1,0 +1,252 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "batch_generate_routes",
+  "result": {
+    "results": [
+      [
+        "CC(=O)CC(=O)C",
+        {
+          "success": true,
+          "routes": [
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(=O)CC(=O)C",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(=O)OC",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(=O)CC(=O)C",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "OC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      [
+        "CC(O)=CC(=O)C",
+        {
+          "success": true,
+          "routes": [
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(O)=CC(=O)C",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(=O)OC",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(O)=CC(=O)C",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "OC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)=O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      [
+        "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+        {
+          "success": true,
+          "routes": [
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)Cc1ccc(C(C)=O)cc1",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      [
+        "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+        {
+          "success": true,
+          "routes": [
+            {
+              "type": "mol",
+              "hide": false,
+              "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+              "is_chemical": true,
+              "in_stock": false,
+              "children": [
+                {
+                  "type": "reaction",
+                  "hide": false,
+                  "is_reaction": true,
+                  "metadata": {
+                    "policy_probability": 0.72,
+                    "policy_name": "uspto"
+                  },
+                  "children": [
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "CC(C)Cc1ccc(C(C)=O)cc1",
+                      "is_chemical": true,
+                      "in_stock": true
+                    },
+                    {
+                      "type": "mol",
+                      "hide": false,
+                      "smiles": "O",
+                      "is_chemical": true,
+                      "in_stock": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    ],
+    "n_success": 4,
+    "n_failed": 0,
+    "total_time_s": 90.0,
+    "throughput_mol_per_min": 2.0,
+    "n_cache_hits": 1
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

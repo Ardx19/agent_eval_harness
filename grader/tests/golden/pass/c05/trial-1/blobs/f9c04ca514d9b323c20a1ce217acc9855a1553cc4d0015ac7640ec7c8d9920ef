@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "list_skills",
+  "result": {
+    "skills": [
+      "route_generation",
+      "route_analysis"
+    ]
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

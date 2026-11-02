@@ -1,0 +1,16 @@
+# Detector-evaluation traces from big-pickle (free opencode model) via opencode.
+agent: opencode
+provider: opencode
+model: big-pickle
+api: openai
+upstream: https://opencode.ai/zen
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+realism: off
+vm_mem_mib: 512
+concurrency: 1
+budget_usd: 1
+limits:
+  wall_s: 900
+  tokens: 500000

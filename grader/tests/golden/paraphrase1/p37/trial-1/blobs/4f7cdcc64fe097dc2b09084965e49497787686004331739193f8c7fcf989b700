@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "tool": "retrosynthesis",
+  "mode": "run_skill",
+  "result": {
+    "success": false,
+    "error": "needs_structured_input",
+    "message": "route required",
+    "required_fields": [
+      "route"
+    ],
+    "hint": "provide a route tree"
+  },
+  "error": null
+}
+[0;93m2026-10-03 21:27:09 [W:onnxruntime:Default] Failed to detect devices[m

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "name": "toy",
+  "description": "A toy skill used by tests.",
+  "entrypoint": {
+    "path": "scripts/toy.sh",
+    "argv0": "toy.sh",
+    "target": "/usr/local/bin/toolstub"
+  },
+  "host": {
+    "dir": "/home/aryandutt/home/Aryan/agent_eval_harness/testdata/fixtures/toy_skill",
+    "command": [
+      "./toy.sh"
+    ],
+    "timeout_s": 30,
+    "serialize": false,
+    "scrub_prefixes": [
+      "/home/aryandutt/home/Aryan/agent_eval_harness/testdata/fixtures/toy_skill"
+    ]
+  },
+  "cli": {
+    "flags": [
+      {
+        "name": "--request",
+        "takes_file": true
+      }
+    ],
+    "stdin_json": true,
+    "allow_positional": true
+  },
+  "modes": [],
+  "top_level": [],
+  "skills": [],
+  "leak_patterns": [],
+  "output_signatures": [
+    "\"tool\":\\s*\"toy\""
+  ]
+}

@@ -1,0 +1,11 @@
+agent: pi
+provider: google
+model: gemini-3.5-flash-lite
+skills: []
+limits:
+  wall_s: 1500
+  tokens: 1500000
+  mem_mb: 4096
+vm_mem_mib: 2048
+budget_usd: 5
+concurrency: 2
