@@ -4,6 +4,21 @@ Runs coding and task agents (pi, opencode) in disposable Firecracker microVMs, r
 
 Where things stand: `docs/results.md` (results and freeze hashes), `docs/audit-report.md` (gate results and findings), `HANDOFF.md` (how to continue). A long learning guide to the code is in `architecture.md`.
 
+## By the numbers
+
+| | |
+|---|---|
+| **Isolation** | every trial runs in its own Firecracker microVM with no network device; model keys never enter the guest; five dedicated isolation tests (hostile guest, tool-path attacks, concurrent VMs, a real agent forging tool output, key stripping) all pass |
+| **Detectors** | 8 provenance checks (F1 to F6, U1, U2) that compare what an agent says with what the host measured |
+| **Code and tests** | about 12,000 lines of Go in 15 packages and 7 commands, plus 8,000 lines of Go tests; **793 automated tests pass, 0 fail** (374 Go, 371 grader, 48 tooling) |
+| **Evidence** | 367 recorded trial attempts in 58 run folders; all 485 stored output blobs verify against their hashes; re-running the detectors reproduces the stored flags on 24 of 24 traces; grading output is byte-identical from run to run |
+| **Task suites** | 12 SWE-bench-Lite tasks and 11 terminal tasks, each validated (the gold patch passes, the empty patch fails); 21 break tests; 23 development and 24 held-out prompts for the detectors |
+| **Held-out run** | 24 unseen prompts, **24 of 24 finished, 51 minutes, $0.07 in total** (about $0.003 per trial) on DeepSeek V4.1 Flash |
+| **Detector check on that run** | flagged all 5 labelled fabrications (**recall 1.00**, 95% interval 0.57 to 1.00); **precision 0.56** (0.27 to 0.81), so about half of what it flags is honest |
+| **Works across** | 2 agent CLIs (pi, opencode) and 5 model families (Gemini, DeepSeek, MiMo, Hy3, big-pickle) |
+
+How to read the detector row: it is one small run with 5 positive cases, labelled by model reviewers, not people, so it is a first measurement and not a benchmark. Every false alarm and its cause is written up in `docs/results.md`.
+
 ## How a trial works
 
 1. A fresh microVM boots with **no network device**. The only host channels are vsock: a model proxy (the real API key stays on the host), a tool broker for skills, and a signed control channel.
