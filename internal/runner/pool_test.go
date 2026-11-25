@@ -282,3 +282,37 @@ func TestRefusalLimitAppliesInsideRetries(t *testing.T) {
 		t.Fatalf("calls=%d stopped=%q, want 2 calls and a refusal stop", calls, sum.Stopped)
 	}
 }
+
+// A stream that broke with an error event (Gemini's mid-stream 503) is retried like
+// any infrastructure failure, but it is not a refusal: it must not stop the run
+// through limits.max_refusals.
+func TestStreamErrorsAreRetriedButAreNotRefusals(t *testing.T) {
+	shortBreaker(t)
+	var mu sync.Mutex
+	calls := map[string]int{}
+	withFake(t, func(_ context.Context, _ Options, task Task, trial, attempt int, _ []agents.Skill, _, _ string, _ bool, _ string, _ *Summary) TrialSummary {
+		mu.Lock()
+		calls[task.ID]++
+		n := calls[task.ID]
+		mu.Unlock()
+		if n == 1 { // the first attempt of every task breaks
+			return TrialSummary{TaskID: task.ID, Trial: trial, Status: "infra_error", Reason: "upstream_stream_error", TracePath: "x", Flags: []string{}}
+		}
+		return TrialSummary{TaskID: task.ID, Trial: trial, Status: "ok", TracePath: "x", Flags: []string{}}
+	})
+	o, log := poolOpts(t, 1, 4, 100)
+	o.Profile.Limits.MaxRefusals = 2
+	o.Retries = 3
+	sum, err := Run(context.Background(), o)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if sum.Stopped != "" || len(sum.Trials) != 4 {
+		t.Fatalf("stopped=%q trials=%d\n%s", sum.Stopped, len(sum.Trials), log.String())
+	}
+	for _, ts := range sum.Trials {
+		if ts.Status != "ok" || ts.Attempts != 2 {
+			t.Fatalf("each trial must be retried once and end ok: %+v", ts)
+		}
+	}
+}

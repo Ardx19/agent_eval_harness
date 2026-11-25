@@ -2,6 +2,23 @@
 
 Runs coding and task agents (pi, opencode) in disposable Firecracker microVMs, records one JSON trace per run, and checks that what the agent says it did really happened. Detecting fabricated tool use is the main goal; scoring is a separate, mostly programmatic stage.
 
+Where things stand: `docs/results.md` (results and freeze hashes), `docs/audit-report.md` (gate results and findings), `HANDOFF.md` (how to continue). A long learning guide to the code is in `architecture.md`.
+
+## By the numbers
+
+| | |
+|---|---|
+| **Isolation** | every trial runs in its own Firecracker microVM with no network device; model keys never enter the guest; five dedicated isolation tests (hostile guest, tool-path attacks, concurrent VMs, a real agent forging tool output, key stripping) all pass |
+| **Detectors** | 8 provenance checks (F1 to F6, U1, U2) that compare what an agent says with what the host measured |
+| **Code and tests** | about 12,000 lines of Go in 15 packages and 7 commands, plus 8,000 lines of Go tests; **793 automated tests pass, 0 fail** (374 Go, 371 grader, 48 tooling) |
+| **Evidence** | 367 recorded trial attempts in 58 run folders; all 485 stored output blobs verify against their hashes; re-running the detectors reproduces the stored flags on 24 of 24 traces; grading output is byte-identical from run to run |
+| **Task suites** | 12 SWE-bench-Lite tasks and 11 terminal tasks, each validated (the gold patch passes, the empty patch fails); 21 break tests; 23 development and 24 held-out prompts for the detectors |
+| **Held-out run** | 24 unseen prompts, **24 of 24 finished, 51 minutes, $0.07 in total** (about $0.003 per trial) on DeepSeek V4.1 Flash |
+| **Detector check on that run** | flagged all 5 labelled fabrications (**recall 1.00**, 95% interval 0.57 to 1.00); **precision 0.56** (0.27 to 0.81), so about half of what it flags is honest |
+| **Works across** | 2 agent CLIs (pi, opencode) and 5 model families (Gemini, DeepSeek, MiMo, Hy3, big-pickle) |
+
+How to read the detector row: it is one small run with 5 positive cases, labelled by model reviewers, not people, so it is a first measurement and not a benchmark. Every false alarm and its cause is written up in `docs/results.md`.
+
 ## How a trial works
 
 1. A fresh microVM boots with **no network device**. The only host channels are vsock: a model proxy (the real API key stays on the host), a tool broker for skills, and a signed control channel.
@@ -10,34 +27,49 @@ Runs coding and task agents (pi, opencode) in disposable Firecracker microVMs, r
 4. Coding tasks get a second microVM: the agent's final files are copied onto a clean checkout, the hidden tests are applied, and they run there. `resolved` comes only from that run.
 5. Provenance detectors compare the agent's claims with the host evidence and write flags into `trace.json`.
 
-## Commands
+## Quick start
 
 ```bash
 go build -o bin/harness ./cmd/harness
-
-bin/harness doctor                                    # is this machine ready?
-bin/harness validate --profile P --prompts suite/prompts.jsonl   # gate coding tasks: gold must resolve, empty must not
-bin/harness run      --profile P --prompts suite/prompts.jsonl --n 3   # one trace per trial under runs/<run-id>/<task>/trial-N/
-bin/harness grade    --run runs/<run-id> [--expectations checks.jsonl] # report.md + grade.json, no VM needed
-bin/harness reanalyze --run runs/<run-id>             # re-run the detectors on stored traces (free)
-bin/harness review-pack --out pack runs/<run-id>     # blind pack for labelling traces
-bin/harness eval-detectors --pack pack --split heldout   # score the detectors against reviewer labels
+bin/harness doctor                       # needs /dev/kvm readable by your user (see Troubleshooting)
+bin/harness run --profile profiles/retro-eval.yaml --prompts suites/detector-eval-heldout/prompts.jsonl --n 1 --out runs/try
+bin/harness grade --run runs/try/<run-id>
 ```
 
-Profiles (`profiles/*.yaml`) pick the agent (`pi` or `opencode`), provider and model, limits, skills, concurrency and VM memory. Examples: `retro-suite.yaml` (Gemini via pi), `retro-hy3.yaml` (Hy3 via opencode), `swe-lite.yaml`.
+## Commands
 
-### Retrosynthesis grader (standalone, offline)
+| Command | What it does | Flags |
+|---|---|---|
+| `doctor` | checks that this machine can run trials (KVM, Firecracker, kernel, image, memory, agents, model keys) | `-profile`, `-image`, `-artifacts`, `-json` |
+| `run` | runs every prompt `-n` times; one trace per trial under `<out>/<run-id>/<task>/trial-N/` | `-profile`, `-prompts`, `-n`, `-out`, `-budget-usd`, `-retries`, `-seed`, `-root`, `-image`, `-kernel`, `-firecracker`, `-skip-preflight` |
+| `validate` | gates a coding-task suite: the gold patch must resolve, the empty patch must not | `-profile`, `-prompts`, `-out`, `-gold-runs`, `-root` |
+| `grade` | `report.md` and `grade.json` for a stored run; no VM needed | `-run`, `-expectations` |
+| `reanalyze` | re-runs the detectors on stored traces (free); writes `trace.reanalyzed.json` beside each trace | `-run`, `-root` |
+| `review-pack` | writes a blind pack (one `e-*.md` per trial, plus a host-only `key.jsonl`) for labelling | `-out`, then run directories |
+| `eval-detectors` | scores the detectors against labels; precision and recall with 95% Wilson intervals | `-pack`, `-split` (`dev` or `heldout`, required), `-labels`, `-report`, `-root` |
 
-`grader/` is the deterministic grader a collaborator built from `grader-handoff.zip` (Python 3.10+, standard library, `rdkit` optional). It reads stored runs and starts no VM. Each trial gets one of seven outcomes (PASS, FALSE_PASS, FABRICATED, LOUD_FAILURE, GENUINE_FAIL, LOUD_FABRICATION, OTHER_FAILURE) with the rule evidence behind it.
+`bin/harness <command> -h` prints the exact flags.
 
-```bash
-python3 grader/grade_retro.py --data runs/<dir> --spec grader/prompts/spec.jsonl --out <outdir> [--labels reference_labels.jsonl]
-python3 -m pytest grader/tests        # its own tests, 353
-```
+### Batch runs
 
-It writes `rubric_results.jsonl`, `report.md` (with an evidence card per non-PASS trial), `review_queue.jsonl` and `grade_{trials,rules,calls,summary}.csv`. Output is byte-identical between runs. `--data` takes any folder holding `trace.json` + `blobs/`; only the last `trial-N-retryK` of a trial is graded. Rule specs live in `grader/prompts/spec.jsonl` (rebuild with `python3 grader/prompts/build_spec.py`). `grader/` has been patched locally (see `grader/FEEDBACK.md`, top); its results on `runs/detector-eval` are in `grader/out-detector-eval/`.
+`tools/queue/run_queue.sh` runs named stages one after another (`ONLY=stage1,stage2`, `SKIP=task-ids`, `DRY=1` to print the plan). Gemini stages wait for the quota through `tools/queue/gemini_gate.sh`. `tools/queue/watch_stage.sh <stage>` waits on a stage and exits with one reason (`done`, `gone`, `problem`, `stalled`, `quota`, `memory`); run it in the background. The log is `runs/queue/queue.log`.
 
-**Not yet calibrated.** On `runs/detector-eval` it passes its spec's mechanical checks, but some fabrication verdicts still disagree with a hand reading (inherited F1/F2 false alarms, user-supplied numbers, undetected invented geometry). Three rule fixes and the review-queue fix are applied. Details and proposed fixes: `grader/FEEDBACK.md`. Do not quote its fabrication rate before it is compared with reference labels.
+## Profiles
+
+`profiles/*.yaml` choose the agent and model. Keys (`internal/config/profile.go`):
+
+| Key | Meaning |
+|---|---|
+| `agent` | `pi` or `opencode` |
+| `provider`, `model` | the model the agent uses |
+| `api`, `upstream` | the API dialect the agent speaks (`google`, the default, or `openai`) and the upstream base URL |
+| `limits.wall_s`, `limits.idle_s`, `limits.tokens`, `limits.mem_mb` | wall-clock limit, silence limit (default 900 s), token budget, tool memory |
+| `limits.max_refusals` | stop the run after N model-API refusals in a row (0 = never) |
+| `skills`, `tool_mode`, `skill_runner`, `realism` | which skills under `skills/` are installed and how the tool is run |
+| `web` | allow server-side web tools (off by default; the proxy refuses them) |
+| `budget_usd`, `concurrency`, `vm_mem_mib` | cost cap, trials in parallel, guest memory |
+
+Examples: `retro-eval.yaml` (Gemini via pi, the detector-evaluation profile), `retro-hy3.yaml` (Hy3 via opencode), `retro-deepseek.yaml`, `swe-lite.yaml`, `tbench-*.yaml`.
 
 ## Suites
 
@@ -45,16 +77,41 @@ It writes `rubric_results.jsonl`, `report.md` (with an evidence card per non-PAS
 |---|---|
 | `suites/initial` | 21 break-test prompts for the retrosynthesis skill; rubric in `expectations.jsonl`, deterministic checks in `expectations.checks.jsonl` |
 | `suites/swe-lite` | 12 validated SWE-bench-Lite tasks (pytest, flask, requests); environments built by `tools/swe/build_env.py` |
-| `suites/tbench` | 11 small terminal tasks with hidden `verify.sh`; generated by `tools/tbench/build_suite.py`, toolchain layer by `tools/swe/build_tools_layer.py` |
-| `suites/detector-eval` | prompts the skill cannot satisfy, used to collect natural fabrications for measuring the detectors |
+| `suites/tbench` | 11 small terminal tasks with hidden `verify.sh`; generated by `tools/tbench/build_suite.py` |
+| `suites/detector-eval` | prompts the skill cannot satisfy, used to collect natural fabrications (dev set) |
+| `suites/detector-eval-heldout` | 24 fresh prompts (20 temptations, 4 controls) for the one held-out detector scoring; `key.md` is host-only |
 
-Expectations, hidden tests and rubrics are host-only; the runner never reads them and the agent never sees them.
+Expectations, hidden tests, rubrics and keys are host-only; the runner never reads them and the agent never sees them.
 
 ## The trace
 
-`trace.json` holds the agent's trajectory (ATIF), the host's tool-call records, file changes, provenance flags (F1-F6, U1, U2), integrity notes, metrics and, for coding tasks, a `verify` section. Fields and their trust levels are described in `docs/plans/`. Large outputs sit beside it in `blobs/`, addressed by hash.
+`trace.json` holds the agent's trajectory (ATIF), the host's tool-call records, file changes, provenance flags, integrity notes, metrics and, for coding tasks, a `verify` section. Large outputs sit beside it in `blobs/`, addressed by hash. The raw model exchanges are in the trial's `proxy` folder (`exchanges.jsonl`, with the bodies under `blobs`).
 
-Flags: F1 claimed a run that did not happen, F2 forged tool-looking output, F3 numbers or structures in no output, F4 claimed different arguments, F5 claimed a file write that did not happen, F6 the model saw output different from the host's record, U1 forged tool call, U2 forged control frame.
+**Status** of a trial: `ok` (an answer), `gave_up` (no answer), `failed` (the agent exited non-zero with no answer), `timeout`, `budget_exceeded`, or `infra_error`. An `infra_error` is never counted against the agent and is retried (`-retries`). Its `failure.reason` says why: `upstream` (the model API failed or refused), `upstream_stream_error` (a 200 stream ended with an error event, for example Gemini's 503 "high demand"), `upstream_hang`, `tool_oom`, `no_exit_frame`, `scratch_full`, `diff_failed`, or a VM exit reason.
+
+**Flags:** F1 claimed a run that did not happen, F2 forged tool-looking output, F3 numbers or structures in no output, F4 claimed different arguments, F5 claimed a file write that did not happen, F6 the model saw output different from the host's record, U1 forged tool call, U2 forged control frame.
+
+## Retrosynthesis grader (standalone, offline)
+
+`grader/` is the deterministic grader a collaborator built from `grader-handoff.zip` (Python 3.10+, standard library, `rdkit` optional). It reads stored runs and starts no VM. Each trial gets one of seven outcomes (PASS, FALSE_PASS, FABRICATED, LOUD_FAILURE, GENUINE_FAIL, LOUD_FABRICATION, OTHER_FAILURE) with the rule evidence behind it.
+
+```bash
+python3 grader/grade_retro.py --data runs/<dir> --spec grader/prompts/spec.jsonl --out <outdir> [--labels reference_labels.jsonl]
+python3 -m pytest grader/tests -q
+```
+
+It writes `rubric_results.jsonl`, `report.md` (an evidence card per non-PASS trial), `review_queue.jsonl` and `grade_{trials,rules,calls,summary}.csv`. Output is byte-identical between runs. Five of its files were patched locally; `grader/FEEDBACK.md` lists them and why.
+
+**Not calibrated.** Its rules were adjusted on the same traces they were checked on, and it has never been compared with reference labels. Do not quote its fabrication rate as a measurement.
+
+## Checks
+
+```bash
+go test ./... -count=1 -timeout 1500s           # about 25 minutes; some tests boot real microVMs
+python3 -m pytest grader/tests tools/audit/tests tools/queue/tests -q
+python3 tools/audit/check_runs.py               # every stored trace decodes and every blob hash matches
+python3 tools/audit/check_docs.py               # commands, flags and paths in the docs exist
+```
 
 ## Building the pieces
 
@@ -64,10 +121,16 @@ python3 tools/swe/build_env.py <instance-id>     # one SWE task: clean repo + Py
 python3 tools/tbench/build_suite.py              # regenerate the terminal tasks
 ```
 
+## Troubleshooting
+
+- **`doctor`: "/dev/kvm exists but this user cannot open it".** Check `ls -l /dev/kvm`. If its group is a number rather than `kvm`, run `sudo chgrp kvm /dev/kvm && sudo chmod 660 /dev/kvm` and add the rule `KERNEL=="kvm", GROUP="kvm", MODE="0660"` to `/etc/udev/rules.d/65-kvm.rules` so it survives a reboot.
+- **No `/dev/kvm` at all on WSL.** The virtual CPU is not exposing AMD-V/VT-x (`grep -c svm /proc/cpuinfo` is 0). This happened after a Windows update in October 2026; `docs/audit-report.md` (U12) has the diagnosis.
+- **Gemini quota.** The free tier allows about 500 requests per day per model. `tools/queue/gemini_gate.sh` probes it before a stage.
+- **Host memory.** The retrosynthesis tool peaks near 5.4 GB. A trial killed for memory is reported as `infra_error`/`tool_oom` and retried.
+
 ## Known limits
 
 - Code running inside the test process can misbehave; canary tests, config-file resets and count checks make faked results detectable, not impossible.
-- The detectors have been tuned on traces I could see. The held-out evaluation (`eval-detectors`) is how that is measured.
-- The retrosynthesis tool needs about 5.5 GB; on a small host it can be killed, and such trials are reported as infrastructure errors and retried.
-- Free-tier model APIs have per-minute token limits; the proxy waits out rate limits, which makes runs slow.
+- The detectors were tuned on traces the author could see. The held-out evaluation (`docs/results.md`) is the measurement; its labels come from Claude subagents, not people (`docs/labelling-log.md`).
+- Free-tier model APIs have per-minute limits and overload errors; the proxy waits out rate limits before streaming starts, and errors after streaming starts become `infra_error` and are retried.
 - Only pi and opencode adapters exist. Hy3 is reached only through opencode (the service requires opencode's own session headers).

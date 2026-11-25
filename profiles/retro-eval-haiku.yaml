@@ -1,0 +1,18 @@
+# Held-out detector evaluation on Claude Haiku 5.5 via opencode and OpenRouter (credential read on the host only).
+# User decision 2026-11-25: Gemini overloaded or out of free quota, opencode free models refused, OpenCode Go key rejected.
+agent: opencode
+provider: openrouter
+model: anthropic/claude-haiku-5.5
+api: openai
+upstream: https://openrouter.ai/api
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+realism: off
+vm_mem_mib: 512
+budget_usd: 2
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000
+  max_refusals: 2

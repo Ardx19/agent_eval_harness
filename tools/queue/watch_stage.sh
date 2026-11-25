@@ -29,7 +29,21 @@ out=$QDIR/$stage.out
 state=$QDIR/watch-$stage.state
 out_lines=0 log_lines=0 quota_reported=0
 # shellcheck disable=SC1090
-[ -f "$state" ] && . "$state"
+if [ -f "$state" ]; then
+  . "$state"
+elif [ -f "$log" ]; then
+  # First watcher for this stage: lines from earlier queue sessions are history, not news.
+  # Start at the latest "queue started" line, and if this stage has not started in that
+  # session yet, skip the stage output left over from an earlier run (the stage truncates
+  # it when it starts, and the reset in check_out picks that up).
+  qs=$(grep -n 'queue started' "$log" | tail -n 1 | cut -d: -f1)
+  if [ -n "$qs" ]; then
+    log_lines=$(( qs - 1 ))
+    if ! tail -n +"$qs" "$log" | grep -qE " stage $stage( |$)" && [ -f "$out" ]; then
+      out_lines=$(wc -l < "$out")
+    fi
+  fi
+fi
 low=0
 
 save() { printf 'out_lines=%s\nlog_lines=%s\nquota_reported=%s\n' "$out_lines" "$log_lines" "$quota_reported" > "$state"; }

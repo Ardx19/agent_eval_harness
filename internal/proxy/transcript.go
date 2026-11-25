@@ -32,8 +32,9 @@ type Exchange struct {
 	ThinkingRequested bool         `json:"thinking_requested,omitempty"`
 	Text              string       `json:"text,omitempty"`
 	Usage             Usage        `json:"usage"`
-	Rejected          string       `json:"rejected,omitempty"` // why the request was not forwarded
-	Infra             string       `json:"infra,omitempty"`    // rate_limited | upstream_error | upstream_unreachable
+	Rejected          string       `json:"rejected,omitempty"`     // why the request was not forwarded
+	Infra             string       `json:"infra,omitempty"`        // rate_limited | upstream_error | upstream_unreachable | upstream_stream_error | upstream_auth
+	StreamError       string       `json:"stream_error,omitempty"` // the error a 200 stream ended with, e.g. "503 UNAVAILABLE"
 	Retries           int          `json:"retries,omitempty"`
 }
 

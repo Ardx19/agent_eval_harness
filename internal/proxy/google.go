@@ -165,6 +165,31 @@ type parsedResponse struct {
 	Text     string
 	Usage    Usage
 	Model    string
+	// StreamError is set when the provider sent an error object inside a response
+	// that had already started with status 200 (for example Gemini's mid-stream
+	// 503 "high demand"). The response is cut off at that point.
+	StreamError string
+}
+
+// chunkError returns a short description when a response chunk is an error
+// object ({"error": {...}}), and "" otherwise.
+func chunkError(raw json.RawMessage) string {
+	var e struct {
+		Error *struct {
+			Code    any    `json:"code"`
+			Status  string `json:"status"`
+			Type    string `json:"type"`
+			Message string `json:"message"`
+		} `json:"error"`
+	}
+	if json.Unmarshal(raw, &e) != nil || e.Error == nil {
+		return ""
+	}
+	desc := strings.TrimSpace(fmt.Sprintf("%v %s%s", e.Error.Code, e.Error.Status, e.Error.Type))
+	if desc == "" || desc == "<nil>" {
+		desc = "error"
+	}
+	return desc
 }
 
 // parseGoogleResponse accepts an SSE stream ("data: {...}" lines), a JSON array
@@ -202,6 +227,12 @@ func parseGoogleResponse(body []byte, exchangeIdx int) parsedResponse {
 				TotalTokenCount      int `json:"totalTokenCount"`
 			} `json:"usageMetadata"`
 			ModelVersion string `json:"modelVersion"`
+		}
+		if e := chunkError(raw); e != "" {
+			if out.StreamError == "" {
+				out.StreamError = e
+			}
+			continue
 		}
 		if json.Unmarshal(raw, &c) != nil {
 			continue

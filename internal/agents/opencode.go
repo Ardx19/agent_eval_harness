@@ -34,6 +34,17 @@ func OpencodeRunSpec(s Spec) guest.RunSpec {
 // key, switches off everything that reaches outside the sandbox (web tools,
 // sharing, updates, MCP servers) and makes the installed skills discoverable.
 func opencodeConfigJSON(s Spec) []byte {
+	prov := map[string]any{
+		"options": map[string]any{"baseURL": "http://" + proxyListen + "/v1", "apiKey": "dummy-key"},
+		// The guest runs with OPENCODE_DISABLE_MODELS_FETCH=1, so opencode only knows the
+		// models bundled into its binary. Declaring the profile's model makes a newer one
+		// (for example deepseek-v4.1-flash-free on 2026-11-25) usable; for a bundled
+		// model the empty entry adds nothing.
+		"models": map[string]any{s.Profile.Model: modelEntry(s.Profile.ModelOptions)},
+	}
+	if s.Profile.ProviderNPM != "" {
+		prov["npm"] = s.Profile.ProviderNPM
+	}
 	cfg := map[string]any{
 		"$schema":           "https://opencode.ai/config.json",
 		"model":             s.Profile.Provider + "/" + s.Profile.Model,
@@ -41,17 +52,24 @@ func opencodeConfigJSON(s Spec) []byte {
 		"share":             "disabled",
 		"snapshot":          false,
 		"enabled_providers": []string{s.Profile.Provider},
-		"provider": map[string]any{s.Profile.Provider: map[string]any{
-			"options": map[string]any{"baseURL": "http://" + proxyListen + "/v1", "apiKey": "dummy-key"}}},
-		"tools":      map[string]bool{"webfetch": false, "websearch": false},
-		"permission": map[string]string{"webfetch": "deny", "websearch": "deny"},
-		"mcp":        map[string]any{},
+		"provider":          map[string]any{s.Profile.Provider: prov},
+		"tools":             map[string]bool{"webfetch": false, "websearch": false},
+		"permission":        map[string]string{"webfetch": "deny", "websearch": "deny"},
+		"mcp":               map[string]any{},
 	}
 	if len(s.Skills) > 0 {
 		cfg["skills"] = map[string]any{"paths": []string{skills.SkillDocDir}}
 	}
 	b, _ := json.MarshalIndent(cfg, "", "  ")
 	return b
+}
+
+// modelEntry is the model's config entry: empty, or carrying the profile's request options.
+func modelEntry(opts map[string]any) map[string]any {
+	if len(opts) == 0 {
+		return map[string]any{}
+	}
+	return map[string]any{"options": opts}
 }
 
 type ocEvent struct {

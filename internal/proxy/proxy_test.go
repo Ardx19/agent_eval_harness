@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-const realKey = "AIzaSyREAL-KEY-THAT-MUST-NEVER-LEAK-0123456789"
+const realKey = "TESTKEYSyREAL-KEY-THAT-MUST-NEVER-LEAK-0123456789"
 const genPath = "/v1beta/models/gemini-3.5-flash-lite:streamGenerateContent"
 
 func newProxy(t *testing.T, upstream *httptest.Server, mut func(*Config)) (*Proxy, *httptest.Server, *Recorder) {
@@ -394,11 +394,11 @@ func (f fakeSys) Run(context.Context, string, ...string) (string, error) { retur
 func TestFetchKey(t *testing.T) {
 	t.Setenv("GEMINI_API_KEY", "")
 	t.Setenv("GOOGLE_API_KEY", "")
-	if k, err := FetchKey(context.Background(), fakeSys{out: "AIzaFromPi\n"}, "google", "m"); err != nil || k != "AIzaFromPi" {
+	if k, err := FetchKey(context.Background(), fakeSys{out: "TESTKEYFromPi\n"}, "google", "m"); err != nil || k != "TESTKEYFromPi" {
 		t.Fatalf("got %q %v", k, err)
 	}
-	t.Setenv("GEMINI_API_KEY", "AIzaFromEnv")
-	if k, err := FetchKey(context.Background(), fakeSys{err: errors.New("exit 1")}, "google", "m"); err != nil || k != "AIzaFromEnv" {
+	t.Setenv("GEMINI_API_KEY", "TESTKEYFromEnv")
+	if k, err := FetchKey(context.Background(), fakeSys{err: errors.New("exit 1")}, "google", "m"); err != nil || k != "TESTKEYFromEnv" {
 		t.Fatalf("env fallback: got %q %v", k, err)
 	}
 	t.Setenv("GEMINI_API_KEY", "")
@@ -749,5 +749,66 @@ func TestMalformedStreamChunkIsSkipped(t *testing.T) {
 	r := parseOpenAIResponse([]byte(body), 0)
 	if r.Text != "Hello" || r.Model != "hy3" {
 		t.Fatalf("text=%q model=%q", r.Text, r.Model)
+	}
+}
+
+// The exact shape Gemini sent on 2026-11-25: a thought-only chunk, then a 503 error
+// event inside the same 200 stream.
+const geminiMidStream503 = "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"**Considering**\\n\",\"thought\": true}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 10811,\"totalTokenCount\": 10998,\"thoughtsTokenCount\": 187},\"modelVersion\": \"gemini-3.5-flash-lite\"}\n\n" +
+	"data: {\"error\": {\"code\": 503,\"message\": \"This model is currently experiencing high demand.\",\"status\": \"UNAVAILABLE\"}}\n\n"
+
+func TestParseGoogleStreamErrorEvent(t *testing.T) {
+	r := parseGoogleResponse([]byte(geminiMidStream503), 0)
+	if r.StreamError != "503 UNAVAILABLE" {
+		t.Fatalf("stream error %q", r.StreamError)
+	}
+	if len(r.Thinking) != 1 || r.Text != "" || r.Usage.Total != 10998 {
+		t.Fatalf("chunks before the error must still be parsed: %+v", r)
+	}
+	if parseGoogleResponse([]byte(okBody), 0).StreamError != "" {
+		t.Fatal("a normal response has no stream error")
+	}
+}
+
+func TestParseOpenAIStreamErrorEvent(t *testing.T) {
+	body := "data: {\"choices\":[{\"delta\":{\"content\":\"Hel\"}}]}\n" +
+		"data: {\"error\":{\"message\":\"overloaded\",\"type\":\"server_error\",\"code\":502}}\n"
+	r := parseOpenAIResponse([]byte(body), 0)
+	if r.Text != "Hel" || !strings.Contains(r.StreamError, "502") {
+		t.Fatalf("text=%q stream error=%q", r.Text, r.StreamError)
+	}
+}
+
+func TestStreamErrorInsideA200IsInfra(t *testing.T) {
+	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/event-stream")
+		io.WriteString(w, geminiMidStream503)
+	}))
+	defer up.Close()
+	_, front, rec := newProxy(t, up, nil)
+	code, body := post(t, front.URL, genPath, `{}`, nil)
+	if code != 200 || !strings.Contains(body, "UNAVAILABLE") {
+		t.Fatalf("the stream must pass through unchanged: %d %q", code, body)
+	}
+	e := rec.Snapshot()[0]
+	if e.Infra != "upstream_stream_error" || e.StreamError != "503 UNAVAILABLE" || e.Status != 200 {
+		t.Fatalf("%+v", e)
+	}
+}
+
+// 2026-11-25: OpenCode Go answered 401 "Invalid credential" for the host's stored key.
+// The agent then exited with no answer; that must not count as the agent failing.
+func TestUpstreamAuthFailureIsInfra(t *testing.T) {
+	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(401)
+		io.WriteString(w, `{"error":{"type":"authentication_error","message":"Invalid credential"}}`)
+	}))
+	defer up.Close()
+	_, front, rec := newProxy(t, up, nil)
+	if code, _ := post(t, front.URL, genPath, `{}`, nil); code != 401 {
+		t.Fatalf("status must pass through, got %d", code)
+	}
+	if e := rec.Snapshot()[0]; e.Infra != "upstream_auth" {
+		t.Fatalf("%+v", e)
 	}
 }

@@ -11,3 +11,12 @@ Tests left out of a batch for reasons that do not depend on the skill or the age
 Evidence for p34: `runs/stopped/partial-r-20261007-054133/p34/` (four attempts, all `tool_oom`).
 
 The queue script leaves tasks out with `SKIP=p34 tools/queue/run_queue.sh`.
+
+## Added 2026-11-25
+
+| Test | Suite | Skipped on | Reason | Needed to run it | Status |
+|---|---|---|---|---|---|
+| Held-out detector run on gemini-3.5-flash-lite (the model the detectors were tuned on) | `suites/detector-eval-heldout` | 2026-11-25 | Gemini returned 503 "high demand" inside 200 streams on most requests all evening; two gated attempts stopped | A quieter day: `tools/queue/gemini_stream_gate.sh` then `ONLY=gemini-heldout tools/queue/run_queue.sh` | not run; the held-out set ran on DeepSeek V4.1 Flash instead |
+| Held-out run on opencode's free models | `suites/detector-eval-heldout` | 2026-11-25 | Zen answers the opencode app but refuses the same request through the harness proxy (`FreeUsageLimitError`); imitating the opencode client was not attempted | none in scope | not run |
+| Grader calibration against reference labels | `grader/` | (deferred) | No human labels | Human labels on `grader/out-initial/` traces | deferred |
+| Dev-pack labels and dev-driven detector fixes (plan U14 pack A, U15 steps 1-2) | `suites/detector-eval/pack` | (deferred by the short plan, 2026-10-21) | Short plan: label only the held-out pack, no detector fixes | Labels on the dev pack | deferred |

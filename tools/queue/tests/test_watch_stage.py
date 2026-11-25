@@ -73,3 +73,22 @@ def test_stall_and_low_memory(tmp_path):
     finally:
         proc.kill()
         proc.wait()
+
+
+def test_earlier_queue_sessions_are_history(tmp_path):
+    # 2026-11-25: a first watcher for a new stage took October's "all stages done" for news.
+    (tmp_path / "queue.log").write_text("2026-10-11 19:09:28 all stages done\ndone\n"
+                                        "2026-11-25 20:16:34 queue started (only: s1)\n2026-11-25 20:16:34 stage s1\n")
+    assert run(tmp_path).startswith("gone:")
+
+
+def test_old_stage_output_before_the_stage_starts_is_history(tmp_path):
+    # The queue is still waiting for its gate; s1.out is left over from a stopped run.
+    (tmp_path / "queue.log").write_text("2026-11-25 19:33:50 queue started (only: s1)\n")
+    (tmp_path / "s1.out").write_text("h01   trial 1  infra_error   steps=0\nstopped early: interrupted\n")
+    assert run(tmp_path).startswith("gone:")
+    # Once the stage starts it truncates its output, and new problems are reported again.
+    with open(tmp_path / "queue.log", "a") as f:
+        f.write("2026-11-25 19:34:48 stage s1\n")
+    (tmp_path / "s1.out").write_text("h02   trial 1  infra_error   steps=1\n")
+    assert run(tmp_path).startswith("problem:")

@@ -73,7 +73,7 @@ EOF`
 	if !flagCodes(tr)["U2"] {
 		t.Errorf("forged control frames must be flagged U2: %+v", tr.Provenance.Flags)
 	}
-	if strings.Contains(res.Console, "AIzaSy-REAL-KEY") || strings.Contains(out, "AIzaSy") {
+	if strings.Contains(res.Console, "TESTKEYSy-REAL-KEY") || strings.Contains(out, "TESTKEYSy") {
 		t.Error("the real API key reached the guest")
 	}
 	for _, k := range *keys {

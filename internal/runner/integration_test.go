@@ -86,7 +86,7 @@ func options(t *testing.T, r rig, root, prompts string, n int, budget float64, u
 	return Options{Profile: prof, PromptsPath: prompts, OutDir: t.TempDir(), Root: root, N: n, Seed: 7, BudgetUSD: budget,
 		FirecrackerBin: r.fc, Kernel: r.kernel, BaseImage: r.base,
 		Entries: filepath.Join(root, "images/build/entries.jsonl"), ImageManifest: filepath.Join(root, "images/build/manifest.json"),
-		Upstream: up, APIKey: "AIzaSy-test-key-not-a-real-one-0123456789", Log: io.Discard}
+		Upstream: up, APIKey: "TESTKEYSy-test-key-not-a-real-one-0123456789", Log: io.Discard}
 }
 
 func TestRunWritesATracePerTrial(t *testing.T) {

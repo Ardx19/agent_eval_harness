@@ -1,0 +1,17 @@
+# Held-out detector evaluation on paid deepseek-v4.1-flash via opencode (OpenCode Go; credential read on the host only).
+# User decision 2026-11-25: no free model worked through the harness that day.
+agent: opencode
+provider: opencode-go
+model: deepseek-v4.1-flash
+api: openai
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+realism: off
+vm_mem_mib: 512
+budget_usd: 2
+concurrency: 1
+limits:
+  wall_s: 900
+  tokens: 500000
+  max_refusals: 2

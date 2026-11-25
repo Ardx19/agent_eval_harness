@@ -36,6 +36,12 @@ type Profile struct {
 	Skills      []string `yaml:"skills"`   // names under skills/<name>/ to make available
 	API         string   `yaml:"api"`      // model API dialect the agent speaks: google (default) or openai
 	Upstream    string   `yaml:"upstream"` // model API base URL; "" uses the dialect default
+	// opencode only. ProviderNPM names the AI SDK package for a provider the guest's
+	// offline opencode does not know (for example "@ai-sdk/openai-compatible").
+	// ModelOptions are sent as the model's request options (for example
+	// {thinking: {type: disabled}} for DeepSeek); the proxy records the request as sent.
+	ProviderNPM  string         `yaml:"provider_npm"`
+	ModelOptions map[string]any `yaml:"model_options"`
 }
 
 // Load reads path, applies defaults, rejects unknown keys and validates.
@@ -101,6 +107,12 @@ func (p *Profile) Validate() error {
 	}
 	if p.Upstream != "" && !strings.HasPrefix(p.Upstream, "https://") && !strings.HasPrefix(p.Upstream, "http://127.") {
 		return fmt.Errorf("upstream %q must be an https URL", p.Upstream)
+	}
+	if (p.ProviderNPM != "" || len(p.ModelOptions) > 0) && p.Agent != "opencode" {
+		return fmt.Errorf("provider_npm and model_options are only used by the opencode agent")
+	}
+	if p.ProviderNPM != "" && !strings.HasPrefix(p.ProviderNPM, "@ai-sdk/") {
+		return fmt.Errorf("provider_npm %q must be an @ai-sdk/ package bundled with opencode", p.ProviderNPM)
 	}
 	switch p.API {
 	case "", "google", "openai":

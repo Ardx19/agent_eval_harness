@@ -129,3 +129,84 @@ func TestIdleAfterModelRequestsFinishedIsAgentTimeout(t *testing.T) {
 		t.Fatalf("%s %+v", tr.Status, tr.Failure)
 	}
 }
+
+func cleanExit(t *testing.T) *Control {
+	t.Helper()
+	key := []byte("k")
+	ctl := NewControl(key)
+	f := guest.Frame{Seq: 0, Stream: guest.StreamExit, Code: 0}
+	f.Sign(key, "")
+	if !ctl.accept(f) {
+		t.Fatal("test frame rejected")
+	}
+	return ctl
+}
+
+// Gemini can answer 200 and then end the stream with a 503 error event. The agent
+// stops with nothing to say; that is the API's failure, not the agent giving up.
+func TestStreamErrorWithNoAnswerIsInfra(t *testing.T) {
+	run := &Run{Exchange: []proxy.Exchange{
+		{Index: 0, Status: 200, ToolCalls: []proxy.ToolCall{{ID: "c1", Name: "bash"}}},
+		{Index: 1, Status: 200, Thinking: []string{"plan"}, Infra: "upstream_stream_error", StreamError: "503 UNAVAILABLE"},
+	}}
+	tr := &trace.Trace{FinalAnswer: finalAnswer(run.Exchange)}
+	classify(tr, run, sandbox.Result{Exit: vm.ExitOK}, cleanExit(t), testProxy(t), nil, nil)
+	if tr.Status != "infra_error" || tr.Failure == nil || tr.Failure.Reason != "upstream_stream_error" || tr.Failure.Attribution != "infra" {
+		t.Fatalf("%s %+v", tr.Status, tr.Failure)
+	}
+}
+
+// When the stream breaks partway through the answer, the answer is cut off: it is
+// not a finished run either.
+func TestStreamErrorWithPartialAnswerIsInfra(t *testing.T) {
+	run := &Run{Exchange: []proxy.Exchange{
+		{Index: 0, Status: 200, Text: "Here are the routes: 1.", Infra: "upstream_stream_error", StreamError: "503 UNAVAILABLE"},
+	}}
+	tr := &trace.Trace{FinalAnswer: finalAnswer(run.Exchange)}
+	if tr.FinalAnswer == "" {
+		t.Fatal("test setup: the partial text should be picked up as the answer")
+	}
+	classify(tr, run, sandbox.Result{Exit: vm.ExitOK}, cleanExit(t), testProxy(t), nil, nil)
+	if tr.Status != "infra_error" || tr.Failure == nil || tr.Failure.Reason != "upstream_stream_error" {
+		t.Fatalf("%s %+v", tr.Status, tr.Failure)
+	}
+}
+
+// An earlier failed request that the agent recovered from does not taint a run that
+// ended with a complete answer.
+func TestRecoveredStreamErrorStillOK(t *testing.T) {
+	run := &Run{Exchange: []proxy.Exchange{
+		{Index: 0, Status: 200, Infra: "upstream_stream_error", StreamError: "503 UNAVAILABLE"},
+		{Index: 1, Status: 200, Text: "Done: route 1 found."},
+	}}
+	tr := &trace.Trace{FinalAnswer: finalAnswer(run.Exchange)}
+	classify(tr, run, sandbox.Result{Exit: vm.ExitOK}, cleanExit(t), testProxy(t), nil, nil)
+	if tr.Status != "ok" {
+		t.Fatalf("%s %+v", tr.Status, tr.Failure)
+	}
+}
+
+// A request the proxy refused (never forwarded) is not an API failure: an agent that
+// gives up after it is still the agent's outcome.
+func TestRejectedLastRequestIsNotInfra(t *testing.T) {
+	run := &Run{Exchange: []proxy.Exchange{
+		{Index: 0, Status: 200, ToolCalls: []proxy.ToolCall{{ID: "c1", Name: "bash"}}},
+		{Index: 1, Status: 403, Rejected: "forbidden_path"},
+	}}
+	tr := &trace.Trace{}
+	classify(tr, run, sandbox.Result{Exit: vm.ExitOK}, cleanExit(t), testProxy(t), nil, nil)
+	if tr.Status != "gave_up" {
+		t.Fatalf("%s %+v", tr.Status, tr.Failure)
+	}
+}
+
+// A rejected credential gave the agent no model at all: infrastructure, and it counts
+// as the API refusing (so max_refusals stops a run that cannot work).
+func TestRejectedCredentialIsInfra(t *testing.T) {
+	run := &Run{Exchange: []proxy.Exchange{{Index: 0, Status: 401, Infra: "upstream_auth"}}}
+	tr := &trace.Trace{}
+	classify(tr, run, sandbox.Result{Exit: vm.ExitOK}, exitedControl(t, ""), testProxy(t), nil, nil)
+	if tr.Status != "infra_error" || tr.Failure == nil || tr.Failure.Reason != "upstream" || tr.Failure.Attribution != "infra" {
+		t.Fatalf("%s %+v", tr.Status, tr.Failure)
+	}
+}
