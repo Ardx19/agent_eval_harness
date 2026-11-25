@@ -13,7 +13,7 @@ import (
 	"agentevalharness/internal/proxy"
 )
 
-const itKey = "AIzaSyREAL-KEY-NEVER-GOES-INTO-THE-GUEST-9876543210"
+const itKey = "TESTKEYSyREAL-KEY-NEVER-GOES-INTO-THE-GUEST-9876543210"
 
 // A guest process reaches a (fake) model only through loopback -> guest-fwd ->
 // vsock -> host proxy. The guest has no NIC and only a dummy key; the proxy

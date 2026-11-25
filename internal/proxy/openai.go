@@ -168,6 +168,12 @@ func parseOpenAIResponse(body []byte, exchangeIdx int) parsedResponse {
 				} `json:"completion_tokens_details"`
 			} `json:"usage"`
 		}
+		if e := chunkError(raw); e != "" {
+			if out.StreamError == "" {
+				out.StreamError = e
+			}
+			continue
+		}
 		if json.Unmarshal(raw, &c) != nil {
 			continue
 		}

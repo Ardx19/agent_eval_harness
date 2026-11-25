@@ -1,7 +1,7 @@
 ---
 title: Go Agent-Eval Harness with Provenance (Firecracker microVM isolation)
 type: feat
-status: active
+status: completed (2026-11-25; short plan, see docs/results.md and docs/audit-report.md)
 date: 2026-10-03
 revised: 2026-10-03 (after Firecracker spike, see docs/spikes/firecracker.md)
 origin: plan.md

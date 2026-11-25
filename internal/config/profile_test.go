@@ -85,3 +85,24 @@ func TestMaxRefusalsTypoIsRejected(t *testing.T) {
 		t.Fatalf("expected unknown-key error, got %v", err)
 	}
 }
+
+// 2026-11-25: DeepSeek's own API needs opencode's OpenAI-compatible adapter (the guest's
+// offline opencode does not know the provider) and thinking switched off per request.
+func TestOpencodeProviderPackageAndModelOptions(t *testing.T) {
+	p, err := Load(write(t, "agent: opencode\nprovider: deepseek\nmodel: deepseek-flash\napi: openai\n"+
+		"upstream: https://api.deepseek.com\nprovider_npm: \"@ai-sdk/openai-compatible\"\n"+
+		"model_options:\n  thinking:\n    type: disabled\n"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	th, ok := p.ModelOptions["thinking"].(map[string]any)
+	if p.ProviderNPM != "@ai-sdk/openai-compatible" || !ok || th["type"] != "disabled" {
+		t.Fatalf("%+v", p)
+	}
+	if _, err := Load(write(t, "agent: pi\nprovider: google\nmodel: m\nmodel_options:\n  x: 1\n")); err == nil {
+		t.Fatal("model_options is opencode-only")
+	}
+	if _, err := Load(write(t, "agent: opencode\nprovider: x\nmodel: m\nprovider_npm: left-pad\n")); err == nil {
+		t.Fatal("provider_npm must be an @ai-sdk/ package")
+	}
+}

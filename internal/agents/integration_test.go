@@ -107,7 +107,7 @@ func run(t *testing.T, r rig, up *httptest.Server, prompt string) *Run {
 		RunsDir: t.TempDir(), TrialID: "trial-1", TaskID: "task-1", RunID: "run-1", Trial: 1, Seed: 1, Prompt: prompt,
 		Profile: profile(t), Skills: []Skill{toySkill(t)},
 		FirecrackerBin: r.fc, Kernel: r.kernel, BaseImage: r.base, UseSG: r.sg, ImageEntries: r.entries, ImageManifest: r.manifest,
-		AgentVersion: "0.85.1", Upstream: up.URL, APIKey: "AIzaSy-REAL-KEY-MUST-STAY-ON-THE-HOST-0123456789",
+		AgentVersion: "0.85.1", Upstream: up.URL, APIKey: "TESTKEYSy-REAL-KEY-MUST-STAY-ON-THE-HOST-0123456789",
 	})
 	if err != nil {
 		if res != nil {
@@ -154,11 +154,11 @@ func TestRealPiHonestRun(t *testing.T) {
 		t.Fatalf("the model should have been called twice, was called %d times", got)
 	}
 	for _, k := range *keys {
-		if !strings.HasPrefix(k, "AIzaSy-REAL-KEY") {
+		if !strings.HasPrefix(k, "TESTKEYSy-REAL-KEY") {
 			t.Fatalf("upstream must see the real key, saw %q", k)
 		}
 	}
-	if strings.Contains(res.Console, "AIzaSy-REAL-KEY") {
+	if strings.Contains(res.Console, "TESTKEYSy-REAL-KEY") {
 		t.Fatal("the real key appeared in the guest console")
 	}
 

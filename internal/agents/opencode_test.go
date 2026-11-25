@@ -115,11 +115,36 @@ func TestOpencodeSpecAndConfig(t *testing.T) {
 	if tools["webfetch"] != false || tools["websearch"] != false {
 		t.Errorf("web tools must be off: %v", tools)
 	}
-	opts := cfg["provider"].(map[string]any)["opencode-go"].(map[string]any)["options"].(map[string]any)
+	prov := cfg["provider"].(map[string]any)["opencode-go"].(map[string]any)
+	opts := prov["options"].(map[string]any)
 	if opts["baseURL"] != "http://127.0.0.1:18080/v1" || opts["apiKey"] != "dummy-key" {
 		t.Errorf("%v", opts)
 	}
+	// The model is declared, so a model newer than the guest binary's bundled list still runs.
+	if _, ok := prov["models"].(map[string]any)["hy3"]; !ok {
+		t.Errorf("the profile's model must be declared: %v", prov)
+	}
 	if _, ok := cfg["skills"]; ok {
 		t.Error("no skills were installed, so none should be configured")
+	}
+}
+
+func TestOpencodeConfigCarriesProviderPackageAndModelOptions(t *testing.T) {
+	s := Spec{Profile: &config.Profile{Agent: "opencode", Provider: "deepseek", Model: "deepseek-flash", API: "openai",
+		ProviderNPM: "@ai-sdk/openai-compatible", ModelOptions: map[string]any{"thinking": map[string]any{"type": "disabled"}}}}
+	var cfg map[string]any
+	if err := json.Unmarshal(opencodeConfigJSON(s), &cfg); err != nil {
+		t.Fatal(err)
+	}
+	prov := cfg["provider"].(map[string]any)["deepseek"].(map[string]any)
+	if prov["npm"] != "@ai-sdk/openai-compatible" {
+		t.Errorf("npm: %v", prov)
+	}
+	th := prov["models"].(map[string]any)["deepseek-flash"].(map[string]any)["options"].(map[string]any)["thinking"].(map[string]any)
+	if th["type"] != "disabled" {
+		t.Errorf("model options: %v", prov)
+	}
+	if opts := prov["options"].(map[string]any); opts["apiKey"] != "dummy-key" {
+		t.Errorf("the guest must only ever see the dummy key: %v", opts)
 	}
 }

@@ -1,7 +1,7 @@
 ---
 title: Sandbox-first completion of the agent eval harness (re-gate, robustness, evidence, held-out detector evaluation, docs)
 type: feat
-status: active
+status: completed (2026-11-25; short plan, see docs/results.md and docs/audit-report.md)
 date: 2026-10-10
 origin: last_stretch_plan.md
 ---

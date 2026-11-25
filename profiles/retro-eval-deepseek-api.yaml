@@ -1,0 +1,23 @@
+# Held-out detector evaluation on DeepSeek V4.1 Flash through DeepSeek's own API (`deepseek-flash`),
+# thinking switched off, via opencode (credential read on the host from opencode's store, never in the guest).
+# User decision 2026-11-25: free routes unavailable; "deepseek v4.1 flash at low/no thinking only".
+agent: opencode
+provider: deepseek
+model: deepseek-flash
+api: openai
+upstream: https://api.deepseek.com
+provider_npm: "@ai-sdk/openai-compatible"
+model_options:
+  thinking:
+    type: disabled
+skills: [retrosynthesis]
+skill_runner: stub
+tool_mode: cold
+realism: off
+vm_mem_mib: 512
+budget_usd: 0.5   # the user's DeepSeek balance is $0.80 and will not be topped up
+concurrency: 1
+limits:
+  wall_s: 600   # user limit 2026-11-25: whole job within 5 h; the real tool takes 40 to 200 s per call
+  tokens: 600000
+  max_refusals: 2

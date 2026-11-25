@@ -211,6 +211,10 @@ func (p *Proxy) serve(w http.ResponseWriter, r *http.Request) {
 		ex.Infra = "rate_limited"
 	case resp.StatusCode >= 500:
 		ex.Infra = "upstream_error"
+	case resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden:
+		// The provider rejected the host's credential (expired login, lapsed plan).
+		// The agent never had a working model, so this is not its failure.
+		ex.Infra = "upstream_auth"
 	}
 	for _, h := range []string{"Content-Type", "Cache-Control", "Retry-After"} {
 		if v := resp.Header.Get(h); v != "" {
@@ -247,6 +251,11 @@ func (p *Proxy) serve(w http.ResponseWriter, r *http.Request) {
 		ex.ToolCalls, ex.Thinking, ex.Text, ex.Usage = pr.Calls, pr.Thinking, pr.Text, pr.Usage
 		if pr.Model != "" && ex.Model == "" {
 			ex.Model = pr.Model
+		}
+		if pr.StreamError != "" {
+			// The status line said 200, but the provider ended the stream with an
+			// error: whatever the agent got from this request is cut off.
+			ex.Infra, ex.StreamError = "upstream_stream_error", pr.StreamError
 		}
 		p.mu.Lock()
 		p.used += pr.Usage.Total

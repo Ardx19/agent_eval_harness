@@ -356,6 +356,13 @@ func classify(tr *trace.Trace, run *Run, res sandbox.Result, ctl *Control, px *p
 		infra("collect", "diff_failed", diffErr.Error())
 	case ctl.Exit() == nil:
 		infra("run", "no_exit_frame", "the guest never reported an exit")
+	case lastStreamError(run.Exchange) != "":
+		// The run ended on a model request whose 200 stream broke with an error event
+		// (for example Gemini's 503 "high demand"). Any answer is cut off, so the agent
+		// is not scored for it. The reason is not "upstream": the trial is retried, but
+		// a transient overload does not count as the API refusing the run
+		// (limits.max_refusals).
+		infra("model", "upstream_stream_error", "the last model request ended with an error inside the stream ("+lastStreamError(run.Exchange)+"); the answer, if any, is cut off")
 	case hasInfra(run.Exchange) && tr.FinalAnswer == "":
 		infra("model", "upstream", "the model API failed (rate limit or outage) and no answer was produced")
 	case px.BudgetExceeded():
@@ -399,6 +406,18 @@ func hasInfra(ex []proxy.Exchange) bool {
 		}
 	}
 	return false
+}
+
+// lastStreamError returns the in-stream error of the last forwarded model request,
+// or "" when that request ended normally.
+func lastStreamError(ex []proxy.Exchange) string {
+	for i := len(ex) - 1; i >= 0; i-- {
+		if ex[i].Rejected != "" {
+			continue // never forwarded: a policy decision, not the API's
+		}
+		return ex[i].StreamError
+	}
+	return ""
 }
 
 func finalAnswer(ex []proxy.Exchange) string {

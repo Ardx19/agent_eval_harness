@@ -8,7 +8,9 @@
 
 Data: `runs/detector-eval/` (7 runs, 151 trial directories, 89 distinct trials once retries collapse; models gemini-3.5-flash-lite, hy3, mimo-v2.6-flash-free; out-of-scope, mixed and control prompts only).
 Command: `python3 grader/grade_retro.py --data runs/detector-eval --spec grader/prompts/spec.jsonl --out grader/out-detector-eval`
-Outputs of that run are in `grader/out-detector-eval/`. The delivered code in `grader/` is unmodified; the friend's own `grader/out/` is the shipped sample.
+Outputs of that run are in `grader/out-detector-eval/`. The friend's own `grader/out/` is the shipped sample.
+
+**Correction (2026-11-25):** an earlier version of this note said the code in `grader/` was unmodified. That was only true before the fixes described in the updates above. Compared with `grader-return.zip`, five files differ: `grader/grader/decide.py`, `grader/grader/fabrication.py`, `grader/grader/model.py`, `grader/grader/rules.py` and `grader/grader/textutil.py` (checked with `diff -rq` against the unpacked zip).
 
 Verdicts below marked "my reading" come from reading the answer next to the trace by hand. They are not ground truth. Treat them as candidate disagreements for the reference labels.
 

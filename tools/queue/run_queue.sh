@@ -30,8 +30,8 @@ KILL_GRACE_S=${KILL_GRACE_S:-60}
 GATE_WAIT_S=${GATE_WAIT_S:-28800}
 DRY=${DRY:-}
 
-KNOWN=" initial-hy3 initial-mimo initial-pickle initial-mimogo initial-deepseek initial-gemini gemini-break gemini-smoke swe-mimo-rest mimo-extra pickle-main pickle-extra swe-pickle gemini-rest gemini-heldout report "
-OPT=" initial-deepseek initial-gemini gemini-break gemini-smoke gemini-heldout "
+KNOWN=" initial-hy3 initial-mimo initial-pickle initial-mimogo initial-deepseek initial-gemini gemini-break gemini-smoke swe-mimo-rest mimo-extra pickle-main pickle-extra swe-pickle gemini-rest gemini-heldout gemini-heldout-flash deepseek-heldout deepseek-go-heldout deepseek-api-heldout report "
+OPT=" initial-deepseek initial-gemini gemini-break gemini-smoke gemini-heldout gemini-heldout-flash deepseek-heldout deepseek-go-heldout deepseek-api-heldout "
 GATED=" gemini-break gemini-smoke gemini-rest gemini-heldout "
 
 say() { if [ -n "$DRY" ]; then echo "$*"; else mkdir -p runs/queue; echo "$(date '+%F %T') $*" >> "$LOG"; fi; }
@@ -130,6 +130,15 @@ stage swe-pickle      swe-pickle     suites/swe-lite/prompts.jsonl           run
 # Gemini detector traces; gemini-heldout needs the approved held-out prompts (plan U11).
 stage gemini-rest     retro-eval     $EV/prompts.gemini-rest.jsonl           runs/detector-eval 1 2.5
 stage gemini-heldout  retro-eval     suites/detector-eval-heldout/prompts.jsonl runs/detector-eval-heldout 1 2.5
+# The held-out set on gemini-3.5-flash (user decision 2026-11-25, flash-lite overloaded). Not gated by gemini_gate.sh, which probes
+# flash-lite; launch it behind MODEL=gemini-3.5-flash tools/queue/gemini_stream_gate.sh instead.
+stage gemini-heldout-flash retro-eval-flash suites/detector-eval-heldout/prompts.jsonl runs/detector-eval-heldout 1 3
+# The held-out set on deepseek-v4.1-flash-free via opencode (user decision 2026-11-25: gemini-3.5-flash free tier is 20 requests/day).
+stage deepseek-heldout retro-eval-deepseek-free suites/detector-eval-heldout/prompts.jsonl runs/detector-eval-heldout 1 1
+# The held-out set on paid deepseek-v4.1-flash via OpenCode Go (user decision 2026-11-25, about $0.01 per task).
+stage deepseek-go-heldout retro-eval-deepseek suites/detector-eval-heldout/prompts.jsonl runs/detector-eval-heldout 1 2
+# The held-out set on DeepSeek V4.1 Flash via DeepSeek's own API, thinking off (user decision 2026-11-25).
+stage deepseek-api-heldout retro-eval-deepseek-api suites/detector-eval-heldout/prompts.jsonl runs/detector-eval-heldout 1 0.5
 
 if want report default; then
   if [ -n "$DRY" ]; then
